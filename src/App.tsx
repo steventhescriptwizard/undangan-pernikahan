@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState, useEffect, useRef } from 'react';
-import { MapPin, Music, Quote, CheckCircle2, X, ArrowLeft, Flower2, MailOpen } from 'lucide-react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
+import { MapPin, Music, Quote, CheckCircle2, X, ArrowLeft, Flower2, MailOpen, ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
 import { motion, AnimatePresence, useScroll, useTransform } from 'motion/react';
 import { Routes, Route, Link, useNavigate } from 'react-router-dom';
 import { Dashboard } from './Dashboard';
@@ -41,6 +41,14 @@ export interface SiteSettings {
   countdown_target: string;
   cover_image: string;
   hero_image: string;
+  streaming_url?: string;
+  gift_qr_url?: string;
+  gallery_images?: string[];
+  love_story?: { year: string; title: string; description: string }[];
+  // Wallet Settings
+  wallet_name?: string;
+  wallet_number?: string;
+  wallet_owner?: string;
 }
 
 interface CoverProps {
@@ -86,7 +94,7 @@ export const Cover = ({ isOpened, onOpen, settings }: CoverProps) => {
             initial={{ opacity: 0, x: -50, y: -50 }}
             animate={{ opacity: 0.4, x: 0, y: 0 }}
             transition={{ duration: 1.8, delay: 0.6, ease: "easeOut" }}
-            src="public/assets/floral-top-left.png" 
+            src="/assets/floral-top-left.png" 
             alt="Floral decoration" 
             className="fixed -top-5 -left-5 w-64 h-64 object-cover rounded-full mix-blend-multiply pointer-events-none"
             referrerPolicy="no-referrer"
@@ -95,7 +103,7 @@ export const Cover = ({ isOpened, onOpen, settings }: CoverProps) => {
             initial={{ opacity: 0, x: 50, y: 50 }}
             animate={{ opacity: 0.4, x: 0, y: 0 }}
             transition={{ duration: 1.8, delay: 0.6, ease: "easeOut" }}
-            src="public/assets/floral-bottom-right.png" 
+            src="/assets/floral-bottom-right.png" 
             alt="Floral decoration" 
             className="fixed -bottom-5 -right-5 w-64 h-64 object-cover rounded-full mix-blend-multiply pointer-events-none"
             referrerPolicy="no-referrer"
@@ -523,8 +531,8 @@ const EventDetails = ({ settings }: { settings: SiteSettings }) => (
   </section>
 );
 
-const LoveStory = () => {
-  const milestones = [
+const LoveStory = ({ settings }: { settings: SiteSettings }) => {
+  const milestones = settings.love_story && settings.love_story.length > 0 ? settings.love_story : [
     {
       year: '2020',
       title: 'First Meet',
@@ -619,13 +627,17 @@ const LoveStory = () => {
   );
 };
 
-const Gallery = () => {
-  const images = [
+const getGalleryImages = (settings: SiteSettings) => {
+  return settings.gallery_images && settings.gallery_images.length > 0 ? settings.gallery_images : [
     "https://lh3.googleusercontent.com/aida-public/AB6AXuD9tU_dRvaeM6K_Zdub63NP1PDS0agjCqDBKWAk_5filw1FJhUXpyyV1OWPzDUM4D45gScup2R7ODysB6kZHWNDsg725LkAIGFWeUW7lgg2mdS-4ydDrMafzfRvo4uFjlGMjLgWEW-Tt_do53Wh_Qpgwx7FCvaQ3f8KKLHx9LjaKxtXOQZDBLV6NvsDJTVmBOkoFMREfBlnecOo4FnRYAW0b1opL224gxkEywHmh9brqWvQrDkteRaFVKPbqgwzdpB5gi2yAFsErliO",
     "https://lh3.googleusercontent.com/aida-public/AB6AXuC-Hqp8dB2AmQybtmJ160z9knnRQw6Id6oH6-RiNTzm9xEGA_kJwl1ZC2xbTLEUD0UPohGB9Q-8jIXpAzSYwm_U7ypOQA7SpLUYyTFqQ1pKdYaxzFs8muWMHJB9k9YO8Xm9v1KjM28W7Z-tjmzK2sPQm2rtL0NcKYSU3T5vpexoC2oNIS0uPMEmCpVgq0Sb2I3a6QLSqM_G0U5E-DZZIAEgDHN8S_YxfCa-eUAPJhVKrjs2WmDbfx0azduHZFwof-vnIT0L1vFPhFcU",
     "https://lh3.googleusercontent.com/aida-public/AB6AXuCHcjw_MCBbX30FzkAboOBdgJgJcNXovmocz2hhe-cnz3SXLrUY6bkDTWjzRcnL9Rn6A2zKI9XXodD82FO9AnHZRe8KcfSBgFsDBua4j297-MC-l3KOFVMy524EQlQhZUQVnT-GQwRqdqcAbxpEeN8v4SZWoFvzomfI4gqL9b7FphyhQjywF7XcXjfeEz1wsFDZQUAosulBm15z-zktLBx4ceusWmxBeECwhM3K17l4Y15CNDo2vBI_XcA5mftsS8ZnxDBg8vMTchwM",
     "https://lh3.googleusercontent.com/aida-public/AB6AXuCx8-XBWG2nzhsp9SqKYgBB0TT6pgus76oGr_XQzK6NJhYGRZ_ngFWN63j7cNcEogwgMUgFNmxULOhSlRYINECk_oOn2UGOqc2eB9C1HxO_X8AQGpuyt8egkeCgIzKl3rhfYAdN-BhXsJCzFMBcPwpZ4Rk03KbJweGRlm-5aZ7EFJ4vmzByDA8K4A3xYRyHYAuSg5JG-PrgSFDidJO76YkTxNGauoLAJaKdg3skgjlJWUOATGkzHItWXjOyh0jHs7cyiVf2ml2yd1r-"
   ];
+};
+
+const Gallery = ({ settings, onImageSelect }: { settings: SiteSettings, onImageSelect: (src: string) => void }) => {
+  const images = getGalleryImages(settings);
 
   const containerRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
@@ -675,10 +687,21 @@ const Gallery = () => {
             <motion.div 
               key={idx} 
               style={{ y: idx % 2 === 0 ? y1 : y2 }}
-              className="overflow-hidden rounded-[2rem] aspect-[3/4] shadow-2xl shadow-ink/10 relative group"
+              onClick={() => onImageSelect(src)}
+              className="overflow-hidden rounded-[2rem] aspect-[3/4] shadow-2xl shadow-ink/10 relative group cursor-pointer"
             >
-              <div className="absolute inset-0 bg-ink/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10"></div>
-              <img alt="Gallery" className="w-full h-full object-cover transition duration-700 group-hover:scale-110" src={src} referrerPolicy="no-referrer" />
+              <div className="absolute inset-0 bg-ink/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10 flex items-center justify-center">
+                <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/30 transform scale-50 opacity-0 group-hover:scale-100 group-hover:opacity-100 transition-all duration-500">
+                  <Flower2 className="w-5 h-5 text-white" />
+                </div>
+              </div>
+              <img 
+                alt="Gallery" 
+                className="w-full h-full object-cover transition duration-700 group-hover:scale-110" 
+                src={src} 
+                referrerPolicy="no-referrer" 
+                loading="lazy"
+              />
             </motion.div>
           ))}
         </div>
@@ -730,11 +753,11 @@ const WeddingGift = ({ settings }: { settings: SiteSettings }) => {
             className="p-8 bg-white rounded-3xl shadow-xl shadow-brand/5 border border-brand/10 relative overflow-hidden group hover:shadow-2xl hover:shadow-brand/10 transition-all duration-500"
           >
             <div className="absolute top-0 right-0 w-32 h-32 bg-brand/5 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2 group-hover:bg-brand/10 transition-colors duration-500"></div>
-            <p className="font-sans font-medium tracking-widest text-sm text-ink/80">{settings.bank_name}</p>
-            <p className="text-3xl font-serif text-brand my-4 tracking-wider">{settings.bank_account}</p>
+            <p className="font-sans font-medium tracking-widest text-sm text-ink/80">{settings.bank_name || 'BCA'}</p>
+            <p className="text-3xl font-serif text-brand my-4 tracking-wider">{settings.bank_account || '1234567890'}</p>
             <p className="text-sm text-ink/60 font-medium uppercase tracking-widest">A/N {settings.bank_owner}</p>
             <button 
-              onClick={() => handleCopy(settings.bank_account, 'bca')}
+              onClick={() => handleCopy(settings.bank_account || '1234567890', 'bca')}
               className="mt-8 text-xs bg-white border border-brand text-brand px-6 py-2.5 rounded-full uppercase tracking-[0.2em] hover:bg-brand hover:text-white transition-all duration-300 cursor-pointer shadow-sm hover:shadow-md"
             >
               {copied === 'bca' ? 'Tersalin!' : 'Salin Rekening'}
@@ -749,17 +772,105 @@ const WeddingGift = ({ settings }: { settings: SiteSettings }) => {
             className="p-8 bg-white rounded-3xl shadow-xl shadow-dustyrose/5 border border-dustyrose/10 relative overflow-hidden group hover:shadow-2xl hover:shadow-dustyrose/10 transition-all duration-500"
           >
             <div className="absolute top-0 right-0 w-32 h-32 bg-dustyrose/5 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2 group-hover:bg-dustyrose/10 transition-colors duration-500"></div>
-            <p className="font-sans font-medium tracking-widest text-sm text-ink/80">DANA / GOPAY</p>
-            <p className="text-3xl font-serif text-dustyrose my-4 tracking-wider">0812-XXXX-XXXX</p>
-            <p className="text-sm text-ink/60 font-medium uppercase tracking-widest">A/N Nama Mempelai</p>
-            <button 
-              onClick={() => handleCopy('0812-XXXX-XXXX', 'dana')}
-              className="mt-8 text-xs bg-white border border-dustyrose text-dustyrose px-6 py-2.5 rounded-full uppercase tracking-[0.2em] hover:bg-dustyrose hover:text-white transition-all duration-300 cursor-pointer shadow-sm hover:shadow-md"
-            >
-              {copied === 'dana' ? 'Tersalin!' : 'Salin Nomor'}
-            </button>
+            {settings.gift_qr_url ? (
+              <div className="space-y-4">
+                <p className="font-sans font-medium tracking-widest text-sm text-ink/80 uppercase">Digital Gift / QRIS</p>
+                <div className="w-48 h-48 mx-auto bg-white p-2 rounded-2xl border border-ink/5 shadow-inner group-hover:border-brand/30 transition-colors duration-500">
+                  <img 
+                    src={settings.gift_qr_url} 
+                    alt="Gift QR" 
+                    className="w-full h-full object-contain"
+                    referrerPolicy="no-referrer"
+                    loading="lazy"
+                  />
+                </div>
+                <p className="text-sm text-ink/60 font-medium uppercase tracking-widest">A/N {settings.bank_owner}</p>
+                <p className="text-[10px] text-ink/40 italic">Scan QR untuk mengirim tanda kasih</p>
+              </div>
+            ) : (
+              <>
+                <p className="font-sans font-medium tracking-widest text-sm text-ink/80 uppercase">{settings.wallet_name || 'DANA / GOPAY'}</p>
+                <p className="text-3xl font-serif text-dustyrose my-4 tracking-wider">{settings.wallet_number || '0812-XXXX-XXXX'}</p>
+                <p className="text-sm text-ink/60 font-medium uppercase tracking-widest">A/N {settings.wallet_owner || 'Nama Mempelai'}</p>
+                <button 
+                  onClick={() => handleCopy(settings.wallet_number || '0812-XXXX-XXXX', 'dana')}
+                  className="mt-8 text-xs bg-white border border-dustyrose text-dustyrose px-6 py-2.5 rounded-full uppercase tracking-[0.2em] hover:bg-dustyrose hover:text-white transition-all duration-300 cursor-pointer shadow-sm hover:shadow-md"
+                >
+                  {copied === 'dana' ? 'Tersalin!' : 'Salin Nomor'}
+                </button>
+              </>
+            )}
           </motion.div>
         </div>
+      </div>
+    </section>
+  );
+};
+
+const Streaming = ({ settings }: { settings: SiteSettings }) => {
+  if (!settings.streaming_url) return null;
+
+  return (
+    <section className="py-24 bg-white relative overflow-hidden">
+      {/* Decorative floral backgrounds */}
+      <div className="absolute top-0 left-0 w-64 h-64 opacity-5 pointer-events-none -translate-x-1/2 -translate-y-1/2">
+        <Flower2 className="w-full h-full text-brand" />
+      </div>
+      <div className="absolute bottom-0 right-0 w-64 h-64 opacity-5 pointer-events-none translate-x-1/2 translate-y-1/2">
+        <Flower2 className="w-full h-full text-brand rotate-180" />
+      </div>
+
+      <div className="container mx-auto px-4 max-w-4xl text-center relative z-10">
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 1, ease: "easeOut" }}
+          className="p-10 md:p-20 rounded-[3.5rem] bg-ink text-cream relative overflow-hidden group shadow-[0_40px_100px_-20px_rgba(0,0,0,0.3)]"
+        >
+          {/* Subtle noise/texture overlay could be added here if needed */}
+          <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-[0.03]"></div>
+          
+          <div className="relative z-10">
+            <motion.div 
+              initial={{ scale: 0.8, opacity: 0 }}
+              whileInView={{ scale: 1, opacity: 1 }}
+              transition={{ delay: 0.3 }}
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/5 border border-white/10 mb-8"
+            >
+              <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse ring-4 ring-red-500/20"></span>
+              <span className="text-[10px] text-brand uppercase tracking-[0.4em] font-sans font-bold">Online Celebration</span>
+            </motion.div>
+            
+            <h2 className="font-serif text-4xl md:text-6xl mb-8 font-light leading-tight">Momen Suci Dalam <span className="italic text-brand font-normal">Siaran Langsung</span></h2>
+            
+            <p className="text-cream/70 max-w-xl mx-auto mb-12 font-light leading-relaxed text-lg md:text-xl">
+              Kami mengundang Bapak/Ibu/Saudara/i untuk turut menyaksikan janji suci kami secara virtual melalui platform streaming YouTube.
+            </p>
+            
+            <div className="flex flex-col items-center gap-6">
+              <a 
+                href={settings.streaming_url} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-4 px-14 py-6 bg-brand text-white rounded-full font-sans text-xs uppercase tracking-[0.2em] shadow-2xl shadow-brand/30 hover:shadow-brand/60 hover:-translate-y-1.5 transition-all duration-500 group overflow-hidden relative"
+              >
+                <span className="relative z-10 flex items-center gap-3 font-bold">
+                  Buka YouTube Live <ArrowRight className="w-5 h-5 group-hover:translate-x-1.5 transition-all duration-500" />
+                </span>
+                <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out"></div>
+              </a>
+              
+              <p className="text-[10px] text-cream/40 uppercase tracking-[0.3em] font-sans">Klik tombol di atas untuk menuju link siaran</p>
+            </div>
+            
+            <div className="mt-16 flex items-center justify-center gap-8 opacity-20">
+              <div className="h-[1px] w-16 bg-brand"></div>
+              <div className="w-2 h-2 rounded-full bg-brand"></div>
+              <div className="h-[1px] w-16 bg-brand"></div>
+            </div>
+          </div>
+        </motion.div>
       </div>
     </section>
   );
@@ -1256,6 +1367,68 @@ export default function App() {
     hero_image: 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?q=80&w=2070&auto=format&fit=crop',
   });
 
+  const [selectedGalleryImage, setSelectedGalleryImage] = useState<string | null>(null);
+  const galleryImages = useMemo(() => getGalleryImages(siteSettings), [siteSettings.gallery_images]);
+
+  const handleNextImage = (e?: React.MouseEvent) => {
+    e?.stopPropagation();
+    if (!selectedGalleryImage) return;
+    const currentIndex = galleryImages.indexOf(selectedGalleryImage);
+    if (currentIndex === -1) return;
+    const nextIndex = (currentIndex + 1) % galleryImages.length;
+    setSelectedGalleryImage(galleryImages[nextIndex]);
+  };
+
+  const handlePrevImage = (e?: React.MouseEvent) => {
+    e?.stopPropagation();
+    if (!selectedGalleryImage) return;
+    const currentIndex = galleryImages.indexOf(selectedGalleryImage);
+    if (currentIndex === -1) return;
+    const prevIndex = (currentIndex - 1 + galleryImages.length) % galleryImages.length;
+    setSelectedGalleryImage(galleryImages[prevIndex]);
+  };
+
+  const selectedImageRef = useRef(selectedGalleryImage);
+  selectedImageRef.current = selectedGalleryImage;
+  const galleryImagesRef = useRef(galleryImages);
+  galleryImagesRef.current = galleryImages;
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (selectedImageRef.current) {
+        if (e.key === 'ArrowRight') {
+          const currentIndex = galleryImagesRef.current.indexOf(selectedImageRef.current);
+          if (currentIndex !== -1) {
+            const nextIndex = (currentIndex + 1) % galleryImagesRef.current.length;
+            setSelectedGalleryImage(galleryImagesRef.current[nextIndex]);
+          }
+        }
+        if (e.key === 'ArrowLeft') {
+          const currentIndex = galleryImagesRef.current.indexOf(selectedImageRef.current);
+          if (currentIndex !== -1) {
+            const prevIndex = (currentIndex - 1 + galleryImagesRef.current.length) % galleryImagesRef.current.length;
+            setSelectedGalleryImage(galleryImagesRef.current[prevIndex]);
+          }
+        }
+        if (e.key === 'Escape') setSelectedGalleryImage(null);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
+  useEffect(() => {
+    if (selectedGalleryImage) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [selectedGalleryImage]);
+
   useEffect(() => {
     fetchMessages();
     fetchSiteSettings();
@@ -1306,6 +1479,13 @@ export default function App() {
           countdown_target: data.countdown_target || '2026-08-24T08:00:00',
           cover_image: data.cover_image || 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?q=80&w=2070&auto=format&fit=crop',
           hero_image: data.hero_image || 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?q=80&w=2070&auto=format&fit=crop',
+          streaming_url: data.streaming_url,
+          gift_qr_url: data.gift_qr_url,
+          gallery_images: data.gallery_images,
+          love_story: data.love_story,
+          wallet_name: data.wallet_name || 'DANA / GOPAY',
+          wallet_number: data.wallet_number || '0812-XXXX-XXXX',
+          wallet_owner: data.wallet_owner || 'Nama Mempelai',
         });
       }
     } catch (err) {
@@ -1388,8 +1568,9 @@ export default function App() {
             <Hero settings={siteSettings} />
             <Countdown settings={siteSettings} />
             <EventDetails settings={siteSettings} />
-            <LoveStory />
-            <Gallery />
+            <LoveStory settings={siteSettings} />
+            <Gallery settings={siteSettings} onImageSelect={(src) => setSelectedGalleryImage(src)} />
+            <Streaming settings={siteSettings} />
             <WeddingGift settings={siteSettings} />
             <RSVPAndGuestbook messages={messages} onAddMessage={handleAddMessage} guestName={guestName} />
             <Footer settings={siteSettings} />
@@ -1398,6 +1579,61 @@ export default function App() {
         <Route path="/wishes" element={<AllWishes messages={messages} />} />
         <Route path="/dashboard" element={<Dashboard messages={messages} />} />
       </Routes>
+      
+      {/* Lightbox rendered at Root Portal level */}
+      <AnimatePresence>
+        {selectedGalleryImage && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[9999] flex items-center justify-center p-4 md:p-10 bg-black/95 backdrop-blur-md"
+            onClick={() => setSelectedGalleryImage(null)}
+          >
+            <motion.button 
+              className="absolute top-6 right-6 text-white/50 hover:text-white transition-colors z-[10000]"
+              onClick={() => setSelectedGalleryImage(null)}
+            >
+              <X className="w-8 h-8" />
+            </motion.button>
+
+            {/* Navigation Arrows */}
+            {galleryImages.length > 1 && (
+              <>
+                <button 
+                  onClick={handlePrevImage}
+                  className="absolute left-4 md:left-10 top-1/2 -translate-y-1/2 p-3 rounded-full bg-black/40 md:bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-brand hover:text-white hover:scale-110 active:scale-95 transition-all z-[10010] cursor-pointer group"
+                >
+                  <ChevronLeft className="w-6 h-6 md:w-8 md:h-8 group-hover:scale-110 transition-transform" />
+                </button>
+                <button 
+                  onClick={handleNextImage}
+                  className="absolute right-4 md:right-10 top-1/2 -translate-y-1/2 p-3 rounded-full bg-black/40 md:bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-brand hover:text-white hover:scale-110 active:scale-95 transition-all z-[10010] cursor-pointer group"
+                >
+                  <ChevronRight className="w-6 h-6 md:w-8 md:h-8 group-hover:scale-110 transition-transform" />
+                </button>
+                
+                {/* Counter */}
+                <div className="absolute bottom-6 md:bottom-10 left-1/2 -translate-x-1/2 px-6 py-2 rounded-full bg-black/40 md:bg-white/10 backdrop-blur-md border border-white/20 text-white/80 text-[10px] tracking-[0.3em] font-medium z-[10010] uppercase">
+                  {galleryImages.indexOf(selectedGalleryImage!) + 1} / {galleryImages.length}
+                </div>
+              </>
+            )}
+
+            <motion.img 
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              key={selectedGalleryImage} // Key helps with re-animating on change
+              src={selectedGalleryImage}
+              className="max-w-[90vw] max-h-[75vh] md:max-w-[85vw] md:max-h-[85vh] object-contain rounded-2xl shadow-2xl relative z-[10001]"
+              referrerPolicy="no-referrer"
+              loading="lazy"
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <MusicToggle />
     </div>
   );
