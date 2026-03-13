@@ -7,7 +7,6 @@ import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip as RechartsTooltip, L
 import { supabase } from './lib/supabase';
 import Swal from 'sweetalert2';
 import jsPDF from 'jspdf';
-import 'jspdf-autotable';
 
 interface DashboardProps {
   messages: Message[];
@@ -431,28 +430,61 @@ export const Dashboard = ({ messages }: DashboardProps) => {
   const exportToPDF = () => {
     const doc = new jsPDF();
     
+    // Title
     doc.setFontSize(20);
+    doc.setTextColor(44, 48, 46);
     doc.text('Daftar Tamu RSVP', 14, 22);
-    doc.setFontSize(11);
-    
-    const tableColumn = ["Nama", "Status", "Pax", "Pesan", "Waktu"];
-    const tableRows = filteredMessages.map(msg => [
-      msg.name,
-      msg.attend,
-      msg.guests || '-',
-      msg.text || '-',
-      msg.time
-    ]);
 
-    (doc as any).autoTable({
-      head: [tableColumn],
-      body: tableRows,
-      startY: 30,
-      theme: 'grid',
-      headStyles: { fillStyle: '#C5A880' }
+    doc.setFontSize(10);
+    doc.setTextColor(120, 120, 120);
+    doc.text(`Diekspor pada: ${new Date().toLocaleString('id-ID')}`, 14, 30);
+
+    // Table setup
+    const headers = ['Nama', 'Status', 'Pax', 'Waktu'];
+    const colWidths = [75, 30, 20, 45];
+    const colX = [14, 89, 119, 139];
+    const rowHeight = 8;
+    let y = 42;
+
+    // Draw header row
+    doc.setFillColor(197, 168, 128); // brand color
+    doc.rect(14, y - 5, 182, rowHeight, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(9);
+    doc.setFont('helvetica', 'bold');
+    headers.forEach((header, i) => {
+      doc.text(header, colX[i], y);
+    });
+
+    // Draw data rows
+    doc.setFont('helvetica', 'normal');
+    filteredMessages.forEach((msg, idx) => {
+      y += rowHeight;
+      // Alternate row background
+      if (idx % 2 === 0) {
+        doc.setFillColor(253, 252, 251);
+        doc.rect(14, y - 5, 182, rowHeight, 'F');
+      }
+      doc.setTextColor(44, 48, 46);
+      const row = [msg.name, msg.attend, msg.guests || '-', msg.time];
+      row.forEach((cell, i) => {
+        const text = String(cell);
+        const maxWidth = colWidths[i] - 3;
+        const lines = doc.splitTextToSize(text, maxWidth);
+        doc.text(lines[0], colX[i], y); // show first line only to keep table neat
+      });
+      // Bottom line
+      doc.setDrawColor(230, 225, 220);
+      doc.line(14, y + 3, 196, y + 3);
+
+      // New page if needed
+      if (y > 270) {
+        doc.addPage();
+        y = 20;
+      }
     });
     
-    doc.save(`RSVP_Wedding_${new Date().toLocaleDateString()}.pdf`);
+    doc.save(`RSVP_Wedding_${new Date().toLocaleDateString('id-ID')}.pdf`);
   };
 
   const generateInvitationImage = async (name: string) => {
