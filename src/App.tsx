@@ -1577,7 +1577,7 @@ export default function App() {
           </>
         } />
         <Route path="/wishes" element={<AllWishes messages={messages} />} />
-        <Route path="/dashboard" element={<Dashboard messages={messages} />} />
+        <Route path="/pengelola-c8f2a" element={<Dashboard messages={messages} />} />
       </Routes>
       
       {/* Lightbox rendered at Root Portal level */}

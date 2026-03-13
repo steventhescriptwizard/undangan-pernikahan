@@ -12,19 +12,88 @@ interface DashboardProps {
   messages: Message[];
 }
 
+// Dashboard slug — change this if you want a different URL
+const DASHBOARD_SLUG = '/pengelola-c8f2a';
+
+// Lockout config
+const MAX_ATTEMPTS = 3;
+const LOCKOUT_DURATION_MS = 5 * 60 * 1000; // 5 minutes
+const LOCKOUT_KEY = 'wedding_login_locked_until';
+const ATTEMPTS_KEY = 'wedding_login_attempts';
+
 export const Login = ({ onLogin }: { onLogin: () => void }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [countdown, setCountdown] = useState(0);
   const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const getLockedUntil = () => parseInt(localStorage.getItem(LOCKOUT_KEY) || '0', 10);
+  const getAttempts = () => parseInt(localStorage.getItem(ATTEMPTS_KEY) || '0', 10);
+  const isLocked = () => Date.now() < getLockedUntil();
+
+  const formatCountdown = (secs: number) => {
+    const m = Math.floor(secs / 60);
+    const s = secs % 60;
+    return m > 0 ? `${m}m ${s}s` : `${s}s`;
+  };
+
+  // Countdown timer — persisted via localStorage
+  useEffect(() => {
+    const tick = () => {
+      const remaining = getLockedUntil() - Date.now();
+      if (remaining > 0) {
+        setCountdown(Math.ceil(remaining / 1000));
+      } else {
+        setCountdown(0);
+        localStorage.removeItem(LOCKOUT_KEY);
+        localStorage.removeItem(ATTEMPTS_KEY);
+      }
+    };
+    tick();
+    const interval = setInterval(tick, 500);
+    return () => clearInterval(interval);
+  }, []);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // For demo purposes, we accept any non-empty credentials
-    if (email && password) {
-      onLogin();
-      navigate('/dashboard');
+    if (isLocked()) return;
+
+    setIsLoading(true);
+    setError('');
+
+    try {
+      const { error: authError } = await supabase.auth.signInWithPassword({ email, password });
+
+      if (authError) {
+        const newAttempts = getAttempts() + 1;
+        localStorage.setItem(ATTEMPTS_KEY, String(newAttempts));
+
+        if (newAttempts >= MAX_ATTEMPTS) {
+          const lockUntil = Date.now() + LOCKOUT_DURATION_MS;
+          localStorage.setItem(LOCKOUT_KEY, String(lockUntil));
+          setCountdown(Math.ceil(LOCKOUT_DURATION_MS / 1000));
+          setError('Terlalu banyak percobaan. Akun terkunci selama 5 menit.');
+        } else {
+          setError(`Email atau password salah. ${MAX_ATTEMPTS - newAttempts} percobaan tersisa.`);
+        }
+        setPassword('');
+      } else {
+        localStorage.removeItem(LOCKOUT_KEY);
+        localStorage.removeItem(ATTEMPTS_KEY);
+        localStorage.setItem('wedding_admin_auth', 'true');
+        onLogin();
+        navigate(DASHBOARD_SLUG);
+      }
+    } catch {
+      setError('Terjadi kesalahan koneksi. Coba lagi.');
+    } finally {
+      setIsLoading(false);
     }
   };
+
+  const locked = isLocked();
 
   return (
     <div className="min-h-screen bg-cream flex items-center justify-center p-4 relative overflow-hidden">
@@ -42,8 +111,20 @@ export const Login = ({ onLogin }: { onLogin: () => void }) => {
       >
         <div className="text-center mb-10">
           <h1 className="font-serif text-4xl text-ink mb-2">Admin Login</h1>
-          <p className="text-ink/50 text-sm font-light">Enter your credentials to access the dashboard</p>
+          <p className="text-ink/50 text-sm font-light">Masukkan kredensial untuk mengakses dashboard</p>
         </div>
+
+        {(error || locked) && (
+          <div className={`mb-6 px-5 py-3 rounded-2xl text-sm font-light flex items-start gap-3 ${locked ? 'bg-amber-50 border border-amber-200 text-amber-700' : 'bg-red-50 border border-red-200 text-red-600'}`}>
+            <Lock className="w-4 h-4 flex-shrink-0 mt-0.5" />
+            <div>
+              {locked
+                ? <><strong>Akun terkunci.</strong> Coba lagi dalam <span className="font-mono font-bold">{formatCountdown(countdown)}</span></>
+                : error
+              }
+            </div>
+          </div>
+        )}
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
@@ -54,9 +135,10 @@ export const Login = ({ onLogin }: { onLogin: () => void }) => {
                 type="email" 
                 required
                 value={email}
+                disabled={locked || isLoading}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full pl-12 pr-5 py-4 rounded-2xl border border-ink/10 bg-ink/5 font-light text-ink focus:outline-none focus:border-brand/50 focus:bg-white transition-all"
-                placeholder="admin@wedding.com"
+                className="w-full pl-12 pr-5 py-4 rounded-2xl border border-ink/10 bg-ink/5 font-light text-ink focus:outline-none focus:border-brand/50 focus:bg-white transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                placeholder="admin@email.com"
               />
             </div>
           </div>
@@ -69,8 +151,9 @@ export const Login = ({ onLogin }: { onLogin: () => void }) => {
                 type="password" 
                 required
                 value={password}
+                disabled={locked || isLoading}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full pl-12 pr-5 py-4 rounded-2xl border border-ink/10 bg-ink/5 font-light text-ink focus:outline-none focus:border-brand/50 focus:bg-white transition-all"
+                className="w-full pl-12 pr-5 py-4 rounded-2xl border border-ink/10 bg-ink/5 font-light text-ink focus:outline-none focus:border-brand/50 focus:bg-white transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                 placeholder="••••••••"
               />
             </div>
@@ -78,10 +161,17 @@ export const Login = ({ onLogin }: { onLogin: () => void }) => {
 
           <button 
             type="submit"
-            className="w-full group relative inline-flex items-center justify-center px-8 py-4 overflow-hidden rounded-2xl bg-brand text-white font-sans text-sm uppercase tracking-[0.2em] transition-all hover:shadow-[0_0_40px_rgba(197,168,128,0.4)] mt-4 cursor-pointer"
+            disabled={locked || isLoading}
+            className="w-full group relative inline-flex items-center justify-center px-8 py-4 overflow-hidden rounded-2xl bg-brand text-white font-sans text-sm uppercase tracking-[0.2em] transition-all hover:shadow-[0_0_40px_rgba(197,168,128,0.4)] mt-4 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-none"
           >
             <span className="relative z-10 flex items-center gap-2">
-              Sign In <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              {isLoading ? (
+                <span className="inline-block w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+              ) : locked ? (
+                `Terkunci — ${formatCountdown(countdown)}`
+              ) : (
+                <>Sign In <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" /></>
+              )}
             </span>
             <div className="absolute inset-0 h-full w-full scale-0 rounded-2xl bg-white/20 transition-all duration-300 ease-out group-hover:scale-100"></div>
           </button>
@@ -98,9 +188,8 @@ export const Login = ({ onLogin }: { onLogin: () => void }) => {
 };
 
 export const Dashboard = ({ messages }: DashboardProps) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(() => {
-    return localStorage.getItem('wedding_admin_auth') === 'true';
-  });
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [authLoading, setAuthLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('overview');
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isSettingsExpanded, setIsSettingsExpanded] = useState(false);
@@ -152,6 +241,24 @@ export const Dashboard = ({ messages }: DashboardProps) => {
     const matchesStatus = statusFilter === 'All' || msg.attend === statusFilter;
     return matchesSearch && matchesStatus;
   });
+
+  // Check Supabase auth session on mount
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setIsAuthenticated(!!session);
+      setAuthLoading(false);
+    });
+
+    // Listen for auth state changes (e.g. token expiry)
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setIsAuthenticated(!!session);
+      if (!session) {
+        localStorage.removeItem('wedding_admin_auth');
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -528,11 +635,16 @@ export const Dashboard = ({ messages }: DashboardProps) => {
     }
   };
 
+  if (authLoading) {
+    return (
+      <div className="min-h-screen bg-cream flex items-center justify-center">
+        <span className="inline-block w-8 h-8 border-2 border-brand/30 border-t-brand rounded-full animate-spin" />
+      </div>
+    );
+  }
+
   if (!isAuthenticated) {
-    return <Login onLogin={() => {
-      setIsAuthenticated(true);
-      localStorage.setItem('wedding_admin_auth', 'true');
-    }} />;
+    return <Login onLogin={() => setIsAuthenticated(true)} />;
   }
 
   const totalGuests = messages.length;
@@ -667,7 +779,8 @@ export const Dashboard = ({ messages }: DashboardProps) => {
             <span className="font-medium tracking-wide text-sm">View Site</span>
           </Link>
           <button 
-            onClick={() => {
+            onClick={async () => {
+              await supabase.auth.signOut();
               setIsAuthenticated(false);
               localStorage.removeItem('wedding_admin_auth');
             }}
