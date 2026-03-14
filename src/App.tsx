@@ -951,7 +951,7 @@ const WishesModal = ({ isOpen, onClose, onSubmit, defaultName }: { isOpen: boole
         <div className="absolute top-0 right-0 w-64 h-64 bg-brand/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
         <div className="absolute bottom-0 left-0 w-64 h-64 bg-dustyrose/5 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2 pointer-events-none"></div>
 
-        <button onClick={onClose} className="absolute top-6 right-6 text-ink/40 hover:text-ink transition-colors cursor-pointer z-10 bg-white/50 rounded-full p-2 backdrop-blur-sm">
+        <button onClick={onClose} className="absolute top-6 right-6 text-ink/40 hover:text-ink transition-colors cursor-pointer z-50 bg-white/50 rounded-full p-2 backdrop-blur-sm">
           <X className="w-5 h-5" />
         </button>
         
