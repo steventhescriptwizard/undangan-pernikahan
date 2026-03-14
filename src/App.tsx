@@ -246,45 +246,47 @@ const Hero = ({ settings }: { settings: SiteSettings }) => (
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1, delay: 0.2 }}
-        className="text-brand uppercase tracking-[0.3em] text-xs md:text-sm font-medium mb-8 md:mb-12"
+        className="text-brand uppercase tracking-[0.3em] text-xs md:text-sm font-medium mb-8 md:mb-12 w-full text-center"
       >
         Ngunduh Mantu Celebration Of
       </motion.p>
       
-      <div className="relative w-full flex flex-col md:flex-row items-center justify-center gap-8 md:gap-16 mb-12 md:mb-16">
+      <div className="relative w-full md:grid md:grid-cols-3 md:items-center flex flex-col items-center gap-8 md:gap-0 mb-12 md:mb-16">
         <motion.h1 
           initial={{ opacity: 0, x: -30 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 1, delay: 0.5 }}
-          className="font-serif text-6xl md:text-8xl lg:text-9xl text-ink font-light tracking-tight text-shimmer animate-text-glow"
+          className="font-serif text-6xl md:text-7xl lg:text-8xl text-ink font-light tracking-tight text-shimmer animate-text-glow md:text-right"
         >
           {settings.groom_name}
         </motion.h1>
         
-        <motion.div 
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1, delay: 0.8 }}
-          className="relative w-56 h-72 md:w-64 md:h-80 lg:w-80 lg:h-[28rem] mx-4 z-10"
-        >
-          <div className="absolute inset-0 border border-brand/40 rounded-t-full rounded-b-full scale-[1.05] -rotate-3 transition-transform duration-700 hover:rotate-0"></div>
-          <div className="absolute inset-0 border border-dustyrose/40 rounded-t-full rounded-b-full scale-[1.05] rotate-3 transition-transform duration-700 hover:rotate-0"></div>
-          <img 
-            alt="Couple" 
-            className="w-full h-full object-cover rounded-t-full rounded-b-full shadow-2xl" 
-            src={settings.hero_image} 
-            referrerPolicy="no-referrer" 
-          />
-          <div className="absolute -bottom-6 -right-6 md:-bottom-8 md:-right-8 w-20 h-20 md:w-24 md:h-24 bg-white rounded-full flex items-center justify-center shadow-xl border border-cream z-20 animate-heartbeat animate-glow-pulse">
-            <span className="font-serif text-4xl md:text-5xl text-brand italic">&</span>
-          </div>
-        </motion.div>
+        <div className="flex justify-center w-full">
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1, delay: 0.8 }}
+            className="relative w-56 h-72 md:w-64 md:h-80 lg:w-80 lg:h-[28rem] mx-auto z-10"
+          >
+            <div className="absolute inset-0 border border-brand/40 rounded-t-full rounded-b-full scale-[1.05] -rotate-3 transition-transform duration-700 hover:rotate-0"></div>
+            <div className="absolute inset-0 border border-dustyrose/40 rounded-t-full rounded-b-full scale-[1.05] rotate-3 transition-transform duration-700 hover:rotate-0"></div>
+            <img 
+              alt="Couple" 
+              className="w-full h-full object-cover rounded-t-full rounded-b-full shadow-2xl" 
+              src={settings.hero_image} 
+              referrerPolicy="no-referrer" 
+            />
+            <div className="absolute left-1/2 -translate-x-1/2 -bottom-6 md:-bottom-8 w-20 h-20 md:w-24 md:h-24 bg-white rounded-full flex items-center justify-center shadow-xl border border-cream z-20 animate-heartbeat animate-glow-pulse">
+              <span className="font-serif text-4xl md:text-5xl text-brand italic">&</span>
+            </div>
+          </motion.div>
+        </div>
 
         <motion.h1 
           initial={{ opacity: 0, x: 30 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 1, delay: 0.5 }}
-          className="font-serif text-6xl md:text-8xl lg:text-9xl text-ink font-light tracking-tight text-shimmer-delayed animate-text-glow"
+          className="font-serif text-6xl md:text-7xl lg:text-8xl text-ink font-light tracking-tight text-shimmer-delayed animate-text-glow md:text-left"
         >
           {settings.bride_name}
         </motion.h1>
