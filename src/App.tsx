@@ -9,6 +9,7 @@ import { motion, AnimatePresence, useScroll, useTransform } from 'motion/react';
 import { Routes, Route, Link, useNavigate } from 'react-router-dom';
 import { Dashboard } from './Dashboard';
 import { supabase } from './lib/supabase';
+import { FallingPetals, SparkleAccent } from './components/FallingPetals';
 
 export interface Message {
   id: number;
@@ -26,7 +27,7 @@ export interface SiteSettings {
   bank_name: string;
   bank_account: string;
   bank_owner: string;
-  // Akad Nikah
+  // Ngunduh Manten
   akad_time: string;
   akad_place: string;
   akad_address: string;
@@ -49,6 +50,10 @@ export interface SiteSettings {
   wallet_name?: string;
   wallet_number?: string;
   wallet_owner?: string;
+  footer_image: string;
+  footer_image_2: string;
+  footer_image_3: string;
+  footer_image_4: string;
 }
 
 interface CoverProps {
@@ -117,6 +122,7 @@ export const Cover = ({ isOpened, onOpen, settings }: CoverProps) => {
               transition={{ duration: 1.2, delay: 0.8, ease: "easeOut" }}
               className="relative w-[85%] max-w-sm lg:max-w-md h-auto bg-cream rounded-t-[200px] rounded-b-2xl shadow-xl shadow-ink/10 flex flex-col items-center pt-12 pb-8 md:pt-14 md:pb-10 px-4 md:px-6 text-ink isolate"
             >
+              <SparkleAccent count={6} />
               
               {/* Top Text */}
               <motion.div 
@@ -126,7 +132,7 @@ export const Cover = ({ isOpened, onOpen, settings }: CoverProps) => {
                 className="text-center mb-4 md:mb-5 z-10 mt-2"
               >
                 <p className="text-[9px] md:text-[10px] uppercase tracking-[0.2em] font-sans font-medium text-ink/80 leading-relaxed">
-                  Merayakan<br/>Dengan Keluarga<br/>Mereka
+                  UNDANGAN
                 </p>
               </motion.div>
 
@@ -138,7 +144,7 @@ export const Cover = ({ isOpened, onOpen, settings }: CoverProps) => {
                 className="text-center mb-4 md:mb-6 z-10"
               >
                 <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl text-ink leading-none transform -rotate-2">
-                  {settings.groom_name} <span className="text-2xl md:text-3xl lg:text-4xl">&amp;</span><br/>{settings.bride_name}
+                  <span className="text-shimmer">{settings.groom_name}</span> <span className="text-2xl md:text-3xl lg:text-4xl text-brand">&</span><br/><span className="text-shimmer-delayed">{settings.bride_name}</span>
                 </h1>
               </motion.div>
 
@@ -150,7 +156,7 @@ export const Cover = ({ isOpened, onOpen, settings }: CoverProps) => {
                 className="text-center mb-6 md:mb-8 z-10"
               >
                 <p className="text-[8px] md:text-[9px] uppercase tracking-[0.2em] font-sans font-medium text-ink/80 leading-relaxed">
-                  Mengundang Anda<br/>Untuk Merayakan<br/>Pernikahan Mereka
+                  Mengundang Anda<br/>Dalam Acara
                 </p>
               </motion.div>
 
@@ -161,7 +167,7 @@ export const Cover = ({ isOpened, onOpen, settings }: CoverProps) => {
                 transition={{ duration: 0.8, delay: 1.8 }}
                 className="text-center mb-6 md:mb-8 z-10 flex flex-col items-center"
               >
-                <p className="text-[10px] md:text-xs tracking-[0.2em] uppercase font-sans font-semibold text-ink mb-3">Pernikahan</p>
+                <p className="text-[10px] md:text-xs tracking-[0.2em] uppercase font-sans font-semibold text-ink mb-3">Ngunduh Mantu</p>
                 <div className="flex flex-col items-center gap-2 text-ink">
                   <p className="text-xs md:text-sm font-serif font-medium uppercase tracking-[0.1em]">{settings.event_date}</p>
                   <div className="w-8 h-px bg-brand/50 my-1"></div>
@@ -242,7 +248,7 @@ const Hero = ({ settings }: { settings: SiteSettings }) => (
         transition={{ duration: 1, delay: 0.2 }}
         className="text-brand uppercase tracking-[0.3em] text-xs md:text-sm font-medium mb-8 md:mb-12"
       >
-        The Wedding Celebration Of
+        Ngunduh Mantu Celebration Of
       </motion.p>
       
       <div className="relative w-full flex flex-col md:flex-row items-center justify-center gap-8 md:gap-16 mb-12 md:mb-16">
@@ -250,7 +256,7 @@ const Hero = ({ settings }: { settings: SiteSettings }) => (
           initial={{ opacity: 0, x: -30 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 1, delay: 0.5 }}
-          className="font-serif text-6xl md:text-8xl lg:text-9xl text-ink font-light tracking-tight"
+          className="font-serif text-6xl md:text-8xl lg:text-9xl text-ink font-light tracking-tight text-shimmer animate-text-glow"
         >
           {settings.groom_name}
         </motion.h1>
@@ -269,8 +275,8 @@ const Hero = ({ settings }: { settings: SiteSettings }) => (
             src={settings.hero_image} 
             referrerPolicy="no-referrer" 
           />
-          <div className="absolute -bottom-6 -right-6 md:-bottom-8 md:-right-8 w-20 h-20 md:w-24 md:h-24 bg-white rounded-full flex items-center justify-center shadow-xl border border-cream z-20 animate-float">
-            <span className="font-serif text-4xl md:text-5xl text-brand italic">&amp;</span>
+          <div className="absolute -bottom-6 -right-6 md:-bottom-8 md:-right-8 w-20 h-20 md:w-24 md:h-24 bg-white rounded-full flex items-center justify-center shadow-xl border border-cream z-20 animate-heartbeat animate-glow-pulse">
+            <span className="font-serif text-4xl md:text-5xl text-brand italic">&</span>
           </div>
         </motion.div>
 
@@ -278,7 +284,7 @@ const Hero = ({ settings }: { settings: SiteSettings }) => (
           initial={{ opacity: 0, x: 30 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 1, delay: 0.5 }}
-          className="font-serif text-6xl md:text-8xl lg:text-9xl text-ink font-light tracking-tight"
+          className="font-serif text-6xl md:text-8xl lg:text-9xl text-ink font-light tracking-tight text-shimmer-delayed animate-text-glow"
         >
           {settings.bride_name}
         </motion.h1>
@@ -356,7 +362,7 @@ const Countdown = ({ settings }: { settings: SiteSettings }) => {
           <div className="w-16 h-px bg-brand/50 mx-auto mt-6"></div>
         </motion.div>
         
-        <div className="grid grid-cols-4 gap-3 md:gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6">
           {[
             { label: 'Hari', value: timeLeft.days },
             { label: 'Jam', value: timeLeft.hours },
@@ -365,16 +371,23 @@ const Countdown = ({ settings }: { settings: SiteSettings }) => {
           ].map((item, idx) => (
             <motion.div 
               key={idx} 
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, scale: 0.8, filter: "blur(10px)" }}
+              whileInView={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
               viewport={{ once: true }}
-              transition={{ delay: idx * 0.1 }}
-              className="bg-cream/30 backdrop-blur-sm p-4 md:p-6 rounded-2xl border border-brand/10 shadow-sm"
+              transition={{ 
+                duration: 0.8, 
+                delay: idx * 0.15,
+                ease: [0.21, 1.11, 0.81, 0.99] // Custom spring-like easing
+              }}
+              className="bg-white/40 backdrop-blur-md p-4 md:p-8 rounded-3xl border border-brand/20 shadow-xl shadow-brand/5 relative group overflow-hidden"
             >
-              <span className="block text-3xl md:text-5xl font-serif text-ink font-light mb-1">
+              <motion.div 
+                className="absolute inset-0 bg-brand/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700"
+              />
+              <span className="block text-4xl md:text-6xl font-serif text-ink font-light mb-2 relative z-10 tabular-nums">
                 {item.value.toString().padStart(2, '0')}
               </span>
-              <span className="text-[10px] md:text-xs uppercase tracking-[0.2em] text-brand font-medium">{item.label}</span>
+              <span className="text-[10px] md:text-xs uppercase tracking-[0.3em] text-brand font-semibold relative z-10">{item.label}</span>
             </motion.div>
           ))}
         </div>
@@ -383,8 +396,45 @@ const Countdown = ({ settings }: { settings: SiteSettings }) => {
   );
 };
 
-const EventDetails = ({ settings }: { settings: SiteSettings }) => (
-  <section id="event" className="py-32 bg-cream relative overflow-hidden">
+const EventDetails = ({ settings }: { settings: SiteSettings }) => {
+  const getEmbedUrl = (url: string) => {
+    if (!url) return '';
+    
+    // Jika sudah format embed, kembalikan langsung
+    if (url.includes('google.com/maps/embed') || url.includes('google.com/maps/search')) return url;
+    
+    // Jika link Google Maps (baik pendek maupun panjang)
+    if (url.includes('maps.app.goo.gl') || url.includes('google.com/maps') || url.includes('goo.gl/maps')) {
+      // Coba ekstrak nama tempat dari URL jika ada format /place/Nama+Tempat
+      const placeMatch = url.match(/place\/([^\/\?]+)/);
+      if (placeMatch && placeMatch[1]) {
+        return `https://www.google.com/maps?q=${placeMatch[1]}&output=embed`;
+      }
+      
+      // Jika tidak ada /place/, gunakan Nama Tempat (akad_place) sebagai query pencarian
+      // Ini adalah cara paling ampuh untuk link pendek
+      if (settings.akad_place) {
+        return `https://www.google.com/maps?q=${encodeURIComponent(settings.akad_place + ' ' + (settings.akad_address || ''))}&output=embed`;
+      }
+    }
+    
+    return '';
+  };
+
+  const getDirectionsUrl = (url: string) => {
+    if (!url) return '#';
+    // If it's an embed URL, try to make it a searchable link for the directions button
+    if (url.includes('google.com/maps/embed')) {
+      const match = url.match(/pb=!1m18!1m12!1m3!1d[^\!]+\!2d([^\!]+)\!3d([^\!]+)/);
+      if (match && match[1] && match[2]) {
+        return `https://www.google.com/maps?q=${match[2]},${match[1]}`;
+      }
+    }
+    return url;
+  };
+
+  return (
+    <section id="event" className="py-32 bg-cream relative overflow-hidden">
     {/* Decorative background elements */}
     <div className="absolute top-0 left-0 w-full h-full bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-30 pointer-events-none"></div>
     <div className="absolute top-1/4 left-0 w-96 h-96 bg-brand/5 rounded-full blur-3xl -translate-x-1/2 pointer-events-none"></div>
@@ -393,21 +443,22 @@ const EventDetails = ({ settings }: { settings: SiteSettings }) => (
     <div className="container mx-auto px-4 max-w-6xl relative z-10">
       <div className="text-center mb-24">
         <motion.p 
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, filter: "blur(10px)", y: 10 }}
+          whileInView={{ opacity: 1, filter: "blur(0px)", y: 0 }}
           viewport={{ once: true }}
-          className="text-brand uppercase tracking-[0.2em] text-xs font-medium mb-3"
+          transition={{ duration: 1 }}
+          className="text-brand uppercase tracking-[0.3em] text-xs font-semibold mb-3"
         >
-          Informasi Acara
+          Informasi
         </motion.p>
         <motion.h2 
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, filter: "blur(10px)", y: 20 }}
+          whileInView={{ opacity: 1, filter: "blur(0px)", y: 0 }}
           viewport={{ once: true }}
-          transition={{ delay: 0.1 }}
-          className="font-serif text-4xl md:text-5xl text-ink font-light"
+          transition={{ duration: 1, delay: 0.2 }}
+          className="font-serif text-4xl md:text-6xl text-ink font-light tracking-tight"
         >
-          Acara Pernikahan
+          Acara Ngunduh Manten
         </motion.h2>
         <motion.div 
           initial={{ opacity: 0, scale: 0 }}
@@ -418,24 +469,24 @@ const EventDetails = ({ settings }: { settings: SiteSettings }) => (
         ></motion.div>
       </div>
       
-      <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
-        {/* Akad Nikah */}
+      <div className="flex justify-center">
+        {/* Ngunduh Manten */}
         <motion.div 
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-          className="bg-white p-10 md:p-12 rounded-[2.5rem] shadow-2xl shadow-ink/5 border border-brand/10 text-center relative group overflow-hidden flex flex-col h-full hover:shadow-brand/10 transition-all duration-500"
+          className="bg-white p-10 md:p-12 rounded-[2.5rem] shadow-2xl shadow-ink/5 border border-brand/10 text-center relative group overflow-hidden flex flex-col max-w-2xl w-full hover:shadow-brand/10 transition-all duration-500"
         >
           <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity duration-700 transform group-hover:scale-110 group-hover:rotate-12">
             <MapPin className="w-40 h-40 text-brand" />
           </div>
           
           <div className="relative z-10 flex-grow">
-            <h3 className="font-serif text-4xl md:text-5xl mb-8 text-ink font-light">Akad Nikah</h3>
+            <h3 className="font-serif text-4xl md:text-5xl mb-8 text-ink font-light">Ngunduh Manten</h3>
             <div className="space-y-6 text-ink/70">
               <div className="bg-brand/5 py-4 px-8 rounded-full inline-block mb-4 border border-brand/10">
-             <p className="font-serif text-xl text-ink">{settings.event_date}</p>
+                <p className="font-serif text-xl text-ink">{settings.event_date}</p>
                 <p className="text-brand font-medium tracking-widest text-xs uppercase mt-1">{settings.akad_time}</p>
               </div>
               
@@ -447,79 +498,41 @@ const EventDetails = ({ settings }: { settings: SiteSettings }) => (
           </div>
           
           <div className="mt-8 relative z-10">
-            <div className="w-full h-56 rounded-[1.5rem] overflow-hidden border border-brand/10 shadow-inner mb-8 group-hover:border-brand/30 transition-colors duration-500">
-              <iframe 
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3966.6439603816766!2d106.82855851476895!3d-6.17006199553255!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69f5ce68b420e1%3A0x6a0f443590327f3!2sIstiqlal%20Mosque!5e0!3m2!1sen!2sid!4v1647854600000!5m2!1sen!2sid" 
-                width="100%" 
-                height="100%" 
-                style={{ border: 0 }} 
-                allowFullScreen 
-                loading="lazy" 
-                referrerPolicy="no-referrer-when-downgrade"
-                title="Lokasi Akad Nikah"
-                className="grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700"
-              ></iframe>
+            <div className="w-full h-72 rounded-[1.5rem] overflow-hidden border border-brand/10 shadow-inner mb-8 group-hover:border-brand/30 transition-colors duration-500">
+              {getEmbedUrl(settings.akad_maps_url) ? (
+                <iframe 
+                  src={getEmbedUrl(settings.akad_maps_url)} 
+                  width="100%" 
+                  height="100%" 
+                  style={{ border: 0 }} 
+                  allowFullScreen 
+                  loading="lazy" 
+                  referrerPolicy="no-referrer-when-downgrade"
+                  title="Lokasi Ngunduh Manten"
+                  className="grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700"
+                ></iframe>
+              ) : (
+                <div className="w-full h-full flex flex-col items-center justify-center bg-brand/5 p-8 text-ink/40">
+                  <MapPin className="w-12 h-12 mb-4 opacity-20" />
+                  <p className="text-[10px] font-sans uppercase tracking-widest mb-2 opacity-60">Lokasi Acara</p>
+                  <p className="font-serif text-lg text-ink text-center mb-4">{settings.akad_place}</p>
+                  <a 
+                    href={settings.akad_maps_url} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-[10px] text-brand border-b border-brand pb-0.5 hover:opacity-70 transition-opacity"
+                  >
+                    Klik untuk melihat peta interaktif
+                  </a>
+                </div>
+              )}
             </div>
             
             <a 
-              href={settings.akad_maps_url} 
+              href={getDirectionsUrl(settings.akad_maps_url)} 
               target="_blank" 
               rel="noopener noreferrer" 
               className="inline-flex items-center justify-center gap-3 px-8 py-4 bg-brand text-white hover:bg-brand/90 transition-all duration-300 rounded-full font-sans text-xs uppercase tracking-[0.2em] w-full shadow-lg shadow-brand/20 hover:shadow-brand/40 hover:-translate-y-0.5"
-            >
-              <MapPin className="w-4 h-4" />
-              <span>Lihat Petunjuk Arah</span>
-            </a>
-          </div>
-        </motion.div>
-        
-        {/* Resepsi */}
-        <motion.div 
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-          className="bg-white p-10 md:p-12 rounded-[2.5rem] shadow-2xl shadow-ink/5 border border-dustyrose/20 text-center relative group overflow-hidden flex flex-col h-full hover:shadow-dustyrose/10 transition-all duration-500"
-        >
-          <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity duration-700 transform group-hover:scale-110 group-hover:rotate-12">
-            <MapPin className="w-40 h-40 text-dustyrose" />
-          </div>
-          
-          <div className="relative z-10 flex-grow">
-            <h3 className="font-serif text-4xl md:text-5xl mb-8 text-ink font-light">Resepsi</h3>
-            <div className="space-y-6 text-ink/70">
-              <div className="bg-dustyrose/5 py-4 px-8 rounded-full inline-block mb-4 border border-dustyrose/20">
-                <p className="font-serif text-xl text-ink">{settings.event_date}</p>
-                <p className="text-dustyrose font-medium tracking-widest text-xs uppercase mt-1">{settings.resepsi_time}</p>
-              </div>
-              
-              <div className="pt-4 pb-2">
-                <p className="font-serif text-2xl text-ink mb-2">{settings.resepsi_place}</p>
-                <p className="text-sm mt-2 text-ink/50 max-w-xs mx-auto font-light leading-relaxed">{settings.resepsi_address}</p>
-              </div>
-            </div>
-          </div>
-          
-          <div className="mt-8 relative z-10">
-            <div className="w-full h-56 rounded-[1.5rem] overflow-hidden border border-dustyrose/20 shadow-inner mb-8 group-hover:border-dustyrose/40 transition-colors duration-500">
-              <iframe 
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3966.486252989269!2d106.82064131476906!3d-6.195392995514681!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69f42111111111%3A0x1111111111111111!2sHotel%20Indonesia%20Kempinski%20Jakarta!5e0!3m2!1sen!2sid!4v1647854700000!5m2!1sen!2sid" 
-                width="100%" 
-                height="100%" 
-                style={{ border: 0 }} 
-                allowFullScreen 
-                loading="lazy" 
-                referrerPolicy="no-referrer-when-downgrade"
-                title="Lokasi Resepsi"
-                className="grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700"
-              ></iframe>
-            </div>
-            
-            <a 
-              href={settings.resepsi_maps_url} 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              className="inline-flex items-center justify-center gap-3 px-8 py-4 bg-dustyrose text-white hover:bg-dustyrose/90 transition-all duration-300 rounded-full font-sans text-xs uppercase tracking-[0.2em] w-full shadow-lg shadow-dustyrose/20 hover:shadow-dustyrose/40 hover:-translate-y-0.5"
             >
               <MapPin className="w-4 h-4" />
               <span>Lihat Petunjuk Arah</span>
@@ -530,6 +543,7 @@ const EventDetails = ({ settings }: { settings: SiteSettings }) => (
     </div>
   </section>
 );
+};
 
 const LoveStory = ({ settings }: { settings: SiteSettings }) => {
   const milestones = settings.love_story && settings.love_story.length > 0 ? settings.love_story : [
@@ -597,24 +611,41 @@ const LoveStory = ({ settings }: { settings: SiteSettings }) => {
             {milestones.map((milestone, index) => (
               <motion.div 
                 key={index}
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                initial={{ 
+                  opacity: 0, 
+                  x: index % 2 === 0 ? 50 : -50,
+                  filter: "blur(10px)"
+                }}
+                whileInView={{ 
+                  opacity: 1, 
+                  x: 0,
+                  filter: "blur(0px)"
+                }}
                 viewport={{ once: true, margin: "-100px" }}
-                transition={{ duration: 0.8, ease: "easeOut" }}
+                transition={{ 
+                  duration: 1.2, 
+                  delay: 0.2,
+                  ease: [0.16, 1, 0.3, 1] 
+                }}
                 className={`flex flex-col md:flex-row items-start md:items-center relative group ${index % 2 === 0 ? 'md:flex-row-reverse' : ''}`}
               >
                 {/* Timeline Dot */}
-                <div className="absolute left-8 md:left-1/2 transform -translate-x-1/2 flex items-center justify-center w-4 h-4 rounded-full bg-white border border-brand z-10 shadow-[0_0_0_4px_rgba(255,255,255,1)] transition-all duration-500 group-hover:scale-150 group-hover:bg-brand">
-                  <div className="w-1.5 h-1.5 rounded-full bg-brand group-hover:bg-white transition-colors duration-500"></div>
+                <div className="absolute left-8 md:left-1/2 transform -translate-x-1/2 flex items-center justify-center w-5 h-5 rounded-full bg-white border-2 border-brand z-10 shadow-[0_0_0_6px_rgba(255,255,255,1)] transition-all duration-700 group-hover:scale-150 group-hover:bg-brand">
+                  <div className="w-2 h-2 rounded-full bg-brand group-hover:bg-white transition-colors duration-500"></div>
                 </div>
                 
                 {/* Content */}
-                <div className={`ml-20 md:ml-0 md:w-1/2 ${index % 2 === 0 ? 'md:pl-16 text-left' : 'md:pr-16 md:text-right'}`}>
-                  <span className="inline-block px-4 py-1 rounded-full border border-brand/20 text-brand text-xs font-medium tracking-widest mb-4 bg-brand/5">
+                <div className={`ml-20 md:ml-0 md:w-1/2 ${index % 2 === 0 ? 'md:pl-20 text-left' : 'md:pr-20 md:text-right'}`}>
+                  <motion.span 
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.4 }}
+                    className="inline-block px-5 py-1.5 rounded-full border border-brand/30 text-brand text-[10px] font-bold tracking-[0.2em] mb-4 bg-brand/5 backdrop-blur-sm"
+                  >
                     {milestone.year}
-                  </span>
-                  <h4 className="font-serif text-3xl text-ink mb-3">{milestone.title}</h4>
-                  <p className="text-ink/60 text-sm leading-loose font-light">
+                  </motion.span>
+                  <h4 className="font-serif text-3xl md:text-4xl text-ink mb-4 tracking-tight">{milestone.title}</h4>
+                  <p className="text-ink/60 text-sm md:text-base leading-relaxed font-light italic">
                     {milestone.description}
                   </p>
                 </div>
@@ -630,7 +661,7 @@ const LoveStory = ({ settings }: { settings: SiteSettings }) => {
 const getGalleryImages = (settings: SiteSettings) => {
   return settings.gallery_images && settings.gallery_images.length > 0 ? settings.gallery_images : [
     "https://lh3.googleusercontent.com/aida-public/AB6AXuD9tU_dRvaeM6K_Zdub63NP1PDS0agjCqDBKWAk_5filw1FJhUXpyyV1OWPzDUM4D45gScup2R7ODysB6kZHWNDsg725LkAIGFWeUW7lgg2mdS-4ydDrMafzfRvo4uFjlGMjLgWEW-Tt_do53Wh_Qpgwx7FCvaQ3f8KKLHx9LjaKxtXOQZDBLV6NvsDJTVmBOkoFMREfBlnecOo4FnRYAW0b1opL224gxkEywHmh9brqWvQrDkteRaFVKPbqgwzdpB5gi2yAFsErliO",
-    "https://lh3.googleusercontent.com/aida-public/AB6AXuC-Hqp8dB2AmQybtmJ160z9knnRQw6Id6oH6-RiNTzm9xEGA_kJwl1ZC2xbTLEUD0UPohGB9Q-8jIXpAzSYwm_U7ypOQA7SpLUYyTFqQ1pKdYaxzFs8muWMHJB9k9YO8Xm9v1KjM28W7Z-tjmzK2sPQm2rtL0NcKYSU3T5vpexoC2oNIS0uPMEmCpVgq0Sb2I3a6QLSqM_G0U5E-DZZIAEgDHN8S_YxfCa-eUAPJhVKrjs2WmDbfx0azduHZFwof-vnIT0L1vFPhFcU",
+    "https://lh3.googleusercontent.com/aida-public/AB6AXuC-Hqp8dB2AmQybtmJ160z9knnRQw6Id6oH6-RiNTzm9xEGA_kJwl1ZC2xbTLEUD0UPohGB9Q-8jIXpAzSYwm_U7ypOQA7SpLUYyTFqQ1pKdYaxzFs8muWMHJB9k9YO8Xm9v1KjM28W7Z-tjmzK2sPQm2rtL0NcKYSU3T5vpexoC2oNIS0uPMEmCpVgq0Sb2I3a6QLSqM_G0U5E-DZZIAEgDHN8S_YxfCa-eUAPJhVKrjs2WmDbfx0azduHZFwof-vnIT0L1vPhFcU",
     "https://lh3.googleusercontent.com/aida-public/AB6AXuCHcjw_MCBbX30FzkAboOBdgJgJcNXovmocz2hhe-cnz3SXLrUY6bkDTWjzRcnL9Rn6A2zKI9XXodD82FO9AnHZRe8KcfSBgFsDBua4j297-MC-l3KOFVMy524EQlQhZUQVnT-GQwRqdqcAbxpEeN8v4SZWoFvzomfI4gqL9b7FphyhQjywF7XcXjfeEz1wsFDZQUAosulBm15z-zktLBx4ceusWmxBeECwhM3K17l4Y15CNDo2vBI_XcA5mftsS8ZnxDBg8vMTchwM",
     "https://lh3.googleusercontent.com/aida-public/AB6AXuCx8-XBWG2nzhsp9SqKYgBB0TT6pgus76oGr_XQzK6NJhYGRZ_ngFWN63j7cNcEogwgMUgFNmxULOhSlRYINECk_oOn2UGOqc2eB9C1HxO_X8AQGpuyt8egkeCgIzKl3rhfYAdN-BhXsJCzFMBcPwpZ4Rk03KbJweGRlm-5aZ7EFJ4vmzByDA8K4A3xYRyHYAuSg5JG-PrgSFDidJO76YkTxNGauoLAJaKdg3skgjlJWUOATGkzHItWXjOyh0jHs7cyiVf2ml2yd1r-"
   ];
@@ -686,18 +717,26 @@ const Gallery = ({ settings, onImageSelect }: { settings: SiteSettings, onImageS
           {images.map((src, idx) => (
             <motion.div 
               key={idx} 
+              initial={{ opacity: 0, scale: 0.9, filter: "blur(10px)" }}
+              whileInView={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
+              viewport={{ once: true }}
+              transition={{ 
+                duration: 1, 
+                delay: idx * 0.1,
+                ease: "easeOut" 
+              }}
               style={{ y: idx % 2 === 0 ? y1 : y2 }}
               onClick={() => onImageSelect(src)}
-              className="overflow-hidden rounded-[2rem] aspect-[3/4] shadow-2xl shadow-ink/10 relative group cursor-pointer"
+              className="overflow-hidden rounded-[2.5rem] aspect-[3/4] shadow-2xl shadow-ink/10 relative group cursor-pointer"
             >
-              <div className="absolute inset-0 bg-ink/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10 flex items-center justify-center">
-                <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/30 transform scale-50 opacity-0 group-hover:scale-100 group-hover:opacity-100 transition-all duration-500">
-                  <Flower2 className="w-5 h-5 text-white" />
+              <div className="absolute inset-0 bg-ink/30 opacity-0 group-hover:opacity-100 transition-opacity duration-700 z-10 flex items-center justify-center backdrop-blur-[2px]">
+                <div className="w-12 h-12 rounded-full bg-white/30 backdrop-blur-md flex items-center justify-center border border-white/40 transform scale-50 opacity-0 group-hover:scale-100 group-hover:opacity-100 transition-all duration-700 shadow-xl">
+                  <Flower2 className="w-6 h-6 text-white animate-spin-slow" />
                 </div>
               </div>
               <img 
                 alt="Gallery" 
-                className="w-full h-full object-cover transition duration-700 group-hover:scale-110" 
+                className="w-full h-full object-cover transition duration-1000 group-hover:scale-110" 
                 src={src} 
                 referrerPolicy="no-referrer" 
                 loading="lazy"
@@ -724,58 +763,67 @@ const WeddingGift = ({ settings }: { settings: SiteSettings }) => {
       <div className="absolute top-0 left-0 w-full h-full bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-30 pointer-events-none"></div>
       <div className="container mx-auto px-4 max-w-3xl text-center relative z-10">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, scale: 0.9, filter: "blur(10px)" }}
+          whileInView={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
           viewport={{ once: true }}
+          transition={{ duration: 1 }}
           className="mb-12"
         >
-          <p className="text-brand uppercase tracking-[0.2em] text-xs font-medium mb-3">Tanda Kasih</p>
-          <h2 className="font-serif text-4xl md:text-5xl text-ink font-light">Wedding Gift</h2>
-          <div className="w-16 h-px bg-brand/50 mx-auto mt-6"></div>
+          <p className="text-brand uppercase tracking-[0.3em] text-xs font-semibold mb-3">Tanda Kasih</p>
+          <h2 className="font-serif text-4xl md:text-6xl text-ink font-light tracking-tight">Wedding Gift</h2>
+          <div className="w-20 h-px bg-brand/50 mx-auto mt-8"></div>
         </motion.div>
         
         <motion.p 
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, y: 20, filter: "blur(5px)" }}
+          whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
           viewport={{ once: true }}
-          transition={{ delay: 0.1 }}
-          className="text-ink/70 mb-12 font-light leading-relaxed max-w-xl mx-auto"
+          transition={{ delay: 0.2, duration: 1 }}
+          className="text-ink/70 mb-16 font-light leading-relaxed max-w-xl mx-auto italic"
         >
           Doa restu Anda merupakan karunia yang sangat berarti bagi kami. Namun jika memberi adalah ungkapan kasih Anda, kami sediakan fitur berikut:
         </motion.p>
         
-        <div className="grid md:grid-cols-2 gap-6 md:gap-8">
+        <div className="grid md:grid-cols-2 gap-8 md:gap-12">
           <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, x: -30, filter: "blur(10px)" }}
+            whileInView={{ opacity: 1, x: 0, filter: "blur(0px)" }}
             viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
-            className="p-8 bg-white rounded-3xl shadow-xl shadow-brand/5 border border-brand/10 relative overflow-hidden group hover:shadow-2xl hover:shadow-brand/10 transition-all duration-500"
+            transition={{ duration: 1, delay: 0.3 }}
+            className="p-10 bg-white rounded-[2.5rem] shadow-2xl shadow-brand/5 border border-brand/10 relative overflow-hidden group hover:shadow-brand/20 transition-all duration-700 isolate"
           >
-            <div className="absolute top-0 right-0 w-32 h-32 bg-brand/5 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2 group-hover:bg-brand/10 transition-colors duration-500"></div>
-            <p className="font-sans font-medium tracking-widest text-sm text-ink/80">{settings.bank_name || 'BCA'}</p>
-            <p className="text-3xl font-serif text-brand my-4 tracking-wider">{settings.bank_account || '1234567890'}</p>
-            <p className="text-sm text-ink/60 font-medium uppercase tracking-widest">A/N {settings.bank_owner}</p>
-            <button 
-              onClick={() => handleCopy(settings.bank_account || '1234567890', 'bca')}
-              className="mt-8 text-xs bg-white border border-brand text-brand px-6 py-2.5 rounded-full uppercase tracking-[0.2em] hover:bg-brand hover:text-white transition-all duration-300 cursor-pointer shadow-sm hover:shadow-md"
-            >
-              {copied === 'bca' ? 'Tersalin!' : 'Salin Rekening'}
-            </button>
+            <div className="absolute top-0 right-0 w-40 h-40 bg-brand/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 group-hover:bg-brand/15 transition-colors duration-700 pointer-events-none -z-10"></div>
+            <p className="font-sans font-semibold tracking-[0.3em] text-xs text-ink/40 uppercase mb-6">{settings.bank_name || 'BCA'}</p>
+            <p className="text-3xl md:text-4xl font-serif text-brand mb-6 tracking-wider leading-none">{settings.bank_account || '1234567890'}</p>
+            <p className="text-xs text-ink/50 font-bold uppercase tracking-[0.2em]">A/N {settings.bank_owner}</p>
+            <div className="mt-10 flex justify-center">
+              <button 
+                onClick={() => handleCopy(settings.bank_account || '1234567890', 'bca')}
+                className="group relative px-8 py-3 rounded-full overflow-hidden border border-brand/30 transition-all duration-500 hover:border-brand cursor-pointer"
+              >
+                <div className="absolute inset-0 bg-brand translate-y-full group-hover:translate-y-0 transition-transform duration-500"></div>
+                <span className="relative z-10 text-[10px] uppercase font-bold tracking-[0.3em] text-brand group-hover:text-white transition-colors duration-500">
+                  {copied === 'bca' ? 'Tersalin!' : 'Salin Rekening'}
+                </span>
+              </button>
+            </div>
           </motion.div>
           
           <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, x: 30, filter: "blur(10px)" }}
+            whileInView={{ opacity: 1, x: 0, filter: "blur(0px)" }}
             viewport={{ once: true }}
-            transition={{ delay: 0.3 }}
-            className="p-8 bg-white rounded-3xl shadow-xl shadow-dustyrose/5 border border-dustyrose/10 relative overflow-hidden group hover:shadow-2xl hover:shadow-dustyrose/10 transition-all duration-500"
+            transition={{ duration: 1, delay: 0.4 }}
+            className="p-10 bg-white rounded-[2.5rem] shadow-2xl shadow-dustyrose/5 border border-dustyrose/10 relative overflow-hidden group hover:shadow-dustyrose/20 transition-all duration-700 isolate"
           >
-            <div className="absolute top-0 right-0 w-32 h-32 bg-dustyrose/5 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2 group-hover:bg-dustyrose/10 transition-colors duration-500"></div>
+            <div className="absolute top-0 right-0 w-40 h-40 bg-dustyrose/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 group-hover:bg-dustyrose/15 transition-colors duration-700 pointer-events-none -z-10"></div>
             {settings.gift_qr_url ? (
-              <div className="space-y-4">
-                <p className="font-sans font-medium tracking-widest text-sm text-ink/80 uppercase">Digital Gift / QRIS</p>
-                <div className="w-48 h-48 mx-auto bg-white p-2 rounded-2xl border border-ink/5 shadow-inner group-hover:border-brand/30 transition-colors duration-500">
+              <div className="space-y-6">
+                <p className="font-sans font-semibold tracking-[0.3em] text-xs text-ink/40 uppercase mb-4">Digital Gift / QRIS</p>
+                <motion.div 
+                  whileHover={{ scale: 1.05 }}
+                  className="w-52 h-52 mx-auto bg-white p-3 rounded-[1.5rem] border border-ink/5 shadow-inner transition-transform duration-700 flex items-center justify-center overflow-hidden"
+                >
                   <img 
                     src={settings.gift_qr_url} 
                     alt="Gift QR" 
@@ -783,21 +831,28 @@ const WeddingGift = ({ settings }: { settings: SiteSettings }) => {
                     referrerPolicy="no-referrer"
                     loading="lazy"
                   />
+                </motion.div>
+                <div>
+                  <p className="text-xs text-ink/50 font-bold uppercase tracking-[0.2em] mb-1">A/N {settings.bank_owner}</p>
+                  <p className="text-[10px] text-ink/30 italic">Scan QR untuk mengirim tanda kasih</p>
                 </div>
-                <p className="text-sm text-ink/60 font-medium uppercase tracking-widest">A/N {settings.bank_owner}</p>
-                <p className="text-[10px] text-ink/40 italic">Scan QR untuk mengirim tanda kasih</p>
               </div>
             ) : (
               <>
-                <p className="font-sans font-medium tracking-widest text-sm text-ink/80 uppercase">{settings.wallet_name || 'DANA / GOPAY'}</p>
-                <p className="text-3xl font-serif text-dustyrose my-4 tracking-wider">{settings.wallet_number || '0812-XXXX-XXXX'}</p>
-                <p className="text-sm text-ink/60 font-medium uppercase tracking-widest">A/N {settings.wallet_owner || 'Nama Mempelai'}</p>
-                <button 
-                  onClick={() => handleCopy(settings.wallet_number || '0812-XXXX-XXXX', 'dana')}
-                  className="mt-8 text-xs bg-white border border-dustyrose text-dustyrose px-6 py-2.5 rounded-full uppercase tracking-[0.2em] hover:bg-dustyrose hover:text-white transition-all duration-300 cursor-pointer shadow-sm hover:shadow-md"
-                >
-                  {copied === 'dana' ? 'Tersalin!' : 'Salin Nomor'}
-                </button>
+                <p className="font-sans font-semibold tracking-[0.3em] text-xs text-ink/40 uppercase mb-6">{settings.wallet_name || 'DANA / GOPAY'}</p>
+                <p className="text-3xl md:text-4xl font-serif text-dustyrose mb-6 tracking-wider leading-none">{settings.wallet_number || '0812-XXXX-XXXX'}</p>
+                <p className="text-xs text-ink/50 font-bold uppercase tracking-[0.2em]">A/N {settings.wallet_owner || 'Nama Mempelai'}</p>
+                <div className="mt-10 flex justify-center">
+                  <button 
+                    onClick={() => handleCopy(settings.wallet_number || '0812-XXXX-XXXX', 'dana')}
+                    className="group relative px-8 py-3 rounded-full overflow-hidden border border-dustyrose/30 transition-all duration-500 hover:border-dustyrose cursor-pointer"
+                  >
+                    <div className="absolute inset-0 bg-dustyrose translate-y-full group-hover:translate-y-0 transition-transform duration-500"></div>
+                    <span className="relative z-10 text-[10px] uppercase font-bold tracking-[0.3em] text-dustyrose group-hover:text-white transition-colors duration-500">
+                      {copied === 'dana' ? 'Tersalin!' : 'Salin Nomor'}
+                    </span>
+                  </button>
+                </div>
               </>
             )}
           </motion.div>
@@ -811,64 +866,44 @@ const Streaming = ({ settings }: { settings: SiteSettings }) => {
   if (!settings.streaming_url) return null;
 
   return (
-    <section className="py-24 bg-white relative overflow-hidden">
-      {/* Decorative floral backgrounds */}
-      <div className="absolute top-0 left-0 w-64 h-64 opacity-5 pointer-events-none -translate-x-1/2 -translate-y-1/2">
-        <Flower2 className="w-full h-full text-brand" />
-      </div>
-      <div className="absolute bottom-0 right-0 w-64 h-64 opacity-5 pointer-events-none translate-x-1/2 translate-y-1/2">
-        <Flower2 className="w-full h-full text-brand rotate-180" />
-      </div>
-
+    <section className="py-20 bg-white relative overflow-hidden">
+      <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-20 pointer-events-none"></div>
       <div className="container mx-auto px-4 max-w-4xl text-center relative z-10">
         <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, scale: 0.9, filter: "blur(10px)" }}
+          whileInView={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
           viewport={{ once: true }}
-          transition={{ duration: 1, ease: "easeOut" }}
-          className="p-10 md:p-20 rounded-[3.5rem] bg-ink text-cream relative overflow-hidden group shadow-[0_40px_100px_-20px_rgba(0,0,0,0.3)]"
+          transition={{ duration: 1 }}
+          className="mb-12"
         >
-          {/* Subtle noise/texture overlay could be added here if needed */}
-          <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-[0.03]"></div>
+          <p className="text-brand uppercase tracking-[0.3em] text-xs font-semibold mb-3">Siaran Langsung</p>
+          <h2 className="font-serif text-4xl md:text-6xl text-ink font-light tracking-tight">Live Streaming</h2>
+          <div className="w-20 h-px bg-brand/50 mx-auto mt-8"></div>
+        </motion.div>
+
+        <motion.div 
+          initial={{ opacity: 0, y: 30, filter: "blur(10px)" }}
+          whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+          viewport={{ once: true }}
+          transition={{ duration: 1.2, delay: 0.2 }}
+          className="p-10 md:p-16 bg-cream rounded-[3rem] shadow-2xl shadow-brand/10 border border-brand/10 relative overflow-hidden group isolate"
+        >
+          <div className="absolute inset-0 bg-white/50 backdrop-blur-sm -z-10"></div>
+          <p className="text-ink/70 mb-10 font-light leading-relaxed max-w-xl mx-auto italic md:text-lg">
+            Kami mengundang Bapak/Ibu/Saudara/i yang tidak dapat hadir secara langsung untuk menyaksikan momen bahagia kami melalui siaran langsung:
+          </p>
           
-          <div className="relative z-10">
-            <motion.div 
-              initial={{ scale: 0.8, opacity: 0 }}
-              whileInView={{ scale: 1, opacity: 1 }}
-              transition={{ delay: 0.3 }}
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/5 border border-white/10 mb-8"
+          <div className="flex justify-center">
+            <a 
+              href={settings.streaming_url} 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="group relative inline-flex items-center gap-4 px-10 py-4 bg-brand text-white rounded-full overflow-hidden shadow-xl shadow-brand/20 transition-all duration-500 hover:scale-105"
             >
-              <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse ring-4 ring-red-500/20"></span>
-              <span className="text-[10px] text-brand uppercase tracking-[0.4em] font-sans font-bold">Online Celebration</span>
-            </motion.div>
-            
-            <h2 className="font-serif text-4xl md:text-6xl mb-8 font-light leading-tight">Momen Suci Dalam <span className="italic text-brand font-normal">Siaran Langsung</span></h2>
-            
-            <p className="text-cream/70 max-w-xl mx-auto mb-12 font-light leading-relaxed text-lg md:text-xl">
-              Kami mengundang Bapak/Ibu/Saudara/i untuk turut menyaksikan janji suci kami secara virtual melalui platform streaming YouTube.
-            </p>
-            
-            <div className="flex flex-col items-center gap-6">
-              <a 
-                href={settings.streaming_url} 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-4 px-14 py-6 bg-brand text-white rounded-full font-sans text-xs uppercase tracking-[0.2em] shadow-2xl shadow-brand/30 hover:shadow-brand/60 hover:-translate-y-1.5 transition-all duration-500 group overflow-hidden relative"
-              >
-                <span className="relative z-10 flex items-center gap-3 font-bold">
-                  Buka YouTube Live <ArrowRight className="w-5 h-5 group-hover:translate-x-1.5 transition-all duration-500" />
-                </span>
-                <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out"></div>
-              </a>
-              
-              <p className="text-[10px] text-cream/40 uppercase tracking-[0.3em] font-sans">Klik tombol di atas untuk menuju link siaran</p>
-            </div>
-            
-            <div className="mt-16 flex items-center justify-center gap-8 opacity-20">
-              <div className="h-[1px] w-16 bg-brand"></div>
-              <div className="w-2 h-2 rounded-full bg-brand"></div>
-              <div className="h-[1px] w-16 bg-brand"></div>
-            </div>
+              <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-500"></div>
+              <Music className="w-6 h-6 animate-pulse" />
+              <span className="relative z-10 font-bold tracking-[0.2em] text-sm uppercase">Buka Siaran Langsung</span>
+            </a>
           </div>
         </motion.div>
       </div>
@@ -1129,28 +1164,29 @@ const RSVPAndGuestbook = ({ messages, onAddMessage, guestName }: { messages: Mes
       <div className="container mx-auto px-4 max-w-4xl relative z-10">
         <div className="text-center mb-16">
           <motion.p 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, filter: "blur(10px)", y: 10 }}
+            whileInView={{ opacity: 1, filter: "blur(0px)", y: 0 }}
             viewport={{ once: true }}
-            className="text-brand uppercase tracking-[0.2em] text-xs font-medium mb-3"
+            transition={{ duration: 1 }}
+            className="text-brand uppercase tracking-[0.3em] text-xs font-semibold mb-3"
           >
             Doa & Harapan
           </motion.p>
           <motion.h2 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, filter: "blur(10px)", y: 20 }}
+            whileInView={{ opacity: 1, filter: "blur(0px)", y: 0 }}
             viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
-            className="font-serif text-4xl md:text-5xl text-ink font-light"
+            transition={{ duration: 1, delay: 0.2 }}
+            className="font-serif text-4xl md:text-6xl text-ink font-light tracking-tight"
           >
-            Wishes &amp; Prayers
+            Wishes & Prayers
           </motion.h2>
           <motion.div 
             initial={{ opacity: 0, scale: 0 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
-            className="w-16 h-px bg-brand/50 mx-auto mt-6"
+            transition={{ duration: 1, delay: 0.4 }}
+            className="w-20 h-px bg-brand/50 mx-auto mt-8"
           ></motion.div>
         </div>
         
@@ -1165,39 +1201,40 @@ const RSVPAndGuestbook = ({ messages, onAddMessage, guestName }: { messages: Mes
             onClick={() => setIsModalOpen(true)}
             className="group relative inline-flex items-center justify-center px-10 py-4 overflow-hidden rounded-full bg-brand text-white font-sans text-sm uppercase tracking-[0.2em] transition-all hover:scale-105 hover:shadow-[0_0_40px_rgba(197,168,128,0.4)] cursor-pointer"
           >
-            <span className="relative z-10">Tulis Harapan & Doa</span>
+            <span className="relative z-10">RSVP & Harapan</span>
             <div className="absolute inset-0 h-full w-full scale-0 rounded-full bg-white/20 transition-all duration-300 ease-out group-hover:scale-100"></div>
           </button>
         </motion.div>
 
-        <div className="space-y-6 mb-12">
+        <div className="space-y-8 mb-16">
           <AnimatePresence>
             {messages.slice(0, 3).map((msg, index) => (
               <motion.div 
                 key={msg.id} 
-                initial={{ opacity: 0, y: 20, scale: 0.95 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="bg-white p-8 rounded-3xl shadow-xl shadow-brand/5 border border-brand/10 relative group hover:shadow-2xl hover:shadow-brand/10 transition-all duration-500"
+                initial={{ opacity: 0, y: 30, scale: 0.98, filter: "blur(10px)" }}
+                whileInView={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8, delay: index * 0.15, ease: "easeOut" }}
+                className="bg-white p-8 md:p-10 rounded-[2.5rem] shadow-2xl shadow-brand/5 border border-brand/10 relative group hover:shadow-brand/15 transition-all duration-700 isolate"
               >
-                <Quote className="absolute top-8 right-8 w-10 h-10 text-brand/5 group-hover:text-brand/10 transition-colors duration-500" />
-                <div className="flex items-center gap-4 mb-4">
-                  <div className="w-12 h-12 rounded-full bg-brand/10 flex items-center justify-center text-brand font-bold font-serif text-xl border border-brand/20">
+                <Quote className="absolute top-10 right-10 w-12 h-12 text-brand/5 group-hover:text-brand/10 transition-all duration-700 -z-10 group-hover:rotate-12" />
+                <div className="flex items-center gap-6">
+                  <div className="w-14 h-14 rounded-full bg-brand/10 flex items-center justify-center text-brand font-bold font-serif text-2xl border border-brand/20 group-hover:bg-brand group-hover:text-white transition-all duration-700 shadow-inner">
                     {msg.name.charAt(0).toUpperCase()}
                   </div>
                   <div>
-                    <p className="font-serif text-xl text-ink leading-tight">{msg.name}</p>
-                    <div className="flex items-center gap-3 mt-1.5">
-                      <span className={`text-[10px] px-3 py-1 rounded-full font-medium uppercase tracking-widest ${msg.attend === 'Hadir' ? 'bg-brand/10 text-brand' : 'bg-ink/5 text-ink/60'}`}>
+                    <p className="font-serif text-2xl text-ink leading-tight mb-2 tracking-tight">{msg.name}</p>
+                    <div className="flex items-center gap-3">
+                      <span className={`text-[10px] px-4 py-1.5 rounded-full font-bold uppercase tracking-[0.2em] shadow-sm ${msg.attend === 'Hadir' ? 'bg-brand/10 text-brand' : 'bg-ink/5 text-ink/40'}`}>
                         {msg.attend}
                       </span>
-                      <span className="text-[10px] text-ink/40 font-medium tracking-wider">
-                        • {msg.time}
+                      <span className="text-[10px] text-ink/30 font-bold uppercase tracking-[0.15em]">
+                         • {msg.time}
                       </span>
                     </div>
                   </div>
                 </div>
-                <p className="text-ink/70 text-sm leading-relaxed relative z-10 font-light italic mt-4">
+                <p className="text-ink/60 text-base md:text-lg leading-relaxed relative z-10 font-light italic mt-8 pl-4 border-l-2 border-brand/20">
                   "{msg.text}"
                 </p>
               </motion.div>
@@ -1243,18 +1280,18 @@ const Footer = ({ settings }: { settings: SiteSettings }) => (
       {/* Small Gallery */}
       <div className="flex flex-wrap justify-center gap-4 md:gap-8 mb-20">
         {[
-          "https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?auto=format&fit=crop&q=80&w=400", // Rings
-          "https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&q=80&w=400", // Bouquet
-          "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&q=80&w=400", // Couple
-          "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80&w=400"  // Decor
+          settings.footer_image || "https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?auto=format&fit=crop&q=80&w=400",
+          settings.footer_image_2 || "https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&q=80&w=400",
+          settings.footer_image_3 || "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&q=80&w=400",
+          settings.footer_image_4 || "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80&w=400"
         ].map((src, idx) => (
           <motion.div 
             key={idx}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, y: 20, filter: "blur(5px)" }}
+            whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
             viewport={{ once: true }}
-            transition={{ delay: idx * 0.1, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-            className="w-20 h-28 md:w-28 md:h-40 rounded-t-full rounded-b-full overflow-hidden border border-brand/20 shadow-2xl shadow-black/50 group"
+            transition={{ delay: idx * 0.1, duration: 0.8 }}
+            className="w-24 h-36 md:w-40 md:h-56 rounded-t-full rounded-b-full overflow-hidden border border-brand/20 shadow-2xl shadow-black/50 group"
           >
             <img src={src} alt="Wedding Gallery" className="w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-110 transition-all duration-700 grayscale-[30%] group-hover:grayscale-0" referrerPolicy="no-referrer" />
           </motion.div>
@@ -1264,27 +1301,39 @@ const Footer = ({ settings }: { settings: SiteSettings }) => (
       <div className="w-px h-24 bg-gradient-to-b from-transparent via-brand/50 to-transparent mb-16"></div>
 
       <motion.div 
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
+        initial={{ opacity: 0, filter: "blur(20px)", scale: 0.9 }}
+        whileInView={{ opacity: 1, filter: "blur(0px)", scale: 1 }}
         viewport={{ once: true }}
-        transition={{ duration: 1 }}
-        className="space-y-10"
+        transition={{ duration: 1.5, ease: "easeOut" }}
+        className="space-y-12"
       >
-        <h2 className="font-serif text-5xl md:text-6xl italic text-brand tracking-wide font-light">Terima Kasih</h2>
-        
-        <p className="max-w-lg mx-auto px-4 text-cream/70 text-sm md:text-base leading-relaxed font-light">
-          Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir untuk memberikan doa restu kepada kami.
-        </p>
-        
-        <div className="flex justify-center items-center gap-6 py-8">
-          <div className="w-16 h-px bg-brand/30"></div>
-          <Flower2 className="w-6 h-6 text-brand/50" />
-          <div className="w-16 h-px bg-brand/30"></div>
+        <div className="space-y-4">
+          <h2 className="font-serif text-5xl md:text-8xl text-brand tracking-tighter">
+            {settings.groom_name} <span className="text-3xl md:text-4xl text-cream/20 font-light">&</span> {settings.bride_name}
+          </h2>
+          <p className="text-cream/40 uppercase tracking-[0.5em] text-[10px] md:text-xs font-bold font-sans">
+            See You on Our Special Day
+          </p>
         </div>
 
-        <div className="pt-4">
-          <p className="font-serif text-4xl md:text-5xl text-cream tracking-wider font-light">{settings.groom_name} <span className="text-brand mx-3 font-serif italic">&amp;</span> {settings.bride_name}</p>
-          <Link to="/dashboard" className="block text-[10px] md:text-xs text-cream/40 hover:text-brand mt-12 tracking-[0.4em] uppercase font-sans transition-colors">Designed with Love</Link>
+        <div className="pt-12 space-y-10">
+          <h3 className="font-serif text-4xl md:text-6xl italic text-brand tracking-wide font-light">Terima Kasih</h3>
+          
+          <p className="max-w-md mx-auto px-4 text-cream/60 text-sm md:text-base leading-relaxed font-light italic">
+            "Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir untuk memberikan doa restu kepada kami."
+          </p>
+          
+          <div className="flex justify-center items-center gap-8 py-4 opacity-30">
+            <div className="w-16 h-px bg-brand"></div>
+            <Flower2 className="w-5 h-5 text-brand" />
+            <div className="w-16 h-px bg-brand"></div>
+          </div>
+
+          <div className="pt-8">
+            <p className="text-cream/40 uppercase tracking-[0.5em] text-[10px] md:text-xs font-bold font-sans">
+              DESIGNED WITH LOVE
+            </p>
+          </div>
         </div>
       </motion.div>
     </div>
@@ -1296,8 +1345,8 @@ const MusicToggle = () => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
-    // Menggunakan musik klasik royalty-free sebagai background
-    audioRef.current = new Audio('https://upload.wikimedia.org/wikipedia/commons/4/4b/Canon_in_D_Major.ogg');
+    // Menggunakan musik pilihan user
+    audioRef.current = new Audio('/assets/sound/Istimewa.mp3');
     audioRef.current.loop = true;
     
     // Mencoba autoplay (browser modern mungkin memblokir ini sampai ada interaksi user)
@@ -1355,16 +1404,20 @@ export default function App() {
     bank_owner: 'Nama Mempelai',
     akad_time: '08:00 WIB - Selesai',
     akad_place: 'Masjid Istiqlal Jakarta',
-    akad_address: 'Jl. Taman Wijaya Kusuma, Ps. Baru, Kecamatan Sawah Besar, Kota Jakarta Pusat',
+    akad_address: 'RT.01 RW01, Ringin Sari, Tamanmartani, Kalasan, Sleman Regency, Special Region of Yogyakarta 55571',
     akad_maps_url: 'https://maps.google.com/?q=Masjid+Istiqlal+Jakarta',
     resepsi_time: '11:00 WIB - 14:00 WIB',
     resepsi_place: 'Hotel Indonesia Kempinski',
     resepsi_address: 'Jl. M.H. Thamrin No.1, Menteng, Kec. Menteng, Kota Jakarta Pusat',
     resepsi_maps_url: 'https://maps.google.com/?q=Hotel+Indonesia+Kempinski+Jakarta',
-    short_date: '24 . 08 . 2026',
+    short_date: '05 . 05 . 2026',
     countdown_target: '2026-08-24T08:00:00',
     cover_image: 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?q=80&w=2070&auto=format&fit=crop',
     hero_image: 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?q=80&w=2070&auto=format&fit=crop',
+    footer_image: '',
+    footer_image_2: '',
+    footer_image_3: '',
+    footer_image_4: '',
   });
 
   const [selectedGalleryImage, setSelectedGalleryImage] = useState<string | null>(null);
@@ -1469,13 +1522,13 @@ export default function App() {
           bank_owner: data.bank_owner || 'Nama Mempelai',
           akad_time: data.akad_time || '08:00 WIB - Selesai',
           akad_place: data.akad_place || 'Masjid Istiqlal Jakarta',
-          akad_address: data.akad_address || 'Jl. Taman Wijaya Kusuma, Ps. Baru, Kecamatan Sawah Besar, Kota Jakarta Pusat',
+          akad_address: data.akad_address || 'RT.01 RW01, Ringin Sari, Tamanmartani, Kalasan, Sleman Regency, Special Region of Yogyakarta 55571',
           akad_maps_url: data.akad_maps_url || 'https://maps.google.com/?q=Masjid+Istiqlal+Jakarta',
           resepsi_time: data.resepsi_time || '11:00 WIB - 14:00 WIB',
           resepsi_place: data.resepsi_place || 'Hotel Indonesia Kempinski',
           resepsi_address: data.resepsi_address || 'Jl. M.H. Thamrin No.1, Menteng, Kec. Menteng, Kota Jakarta Pusat',
           resepsi_maps_url: data.resepsi_maps_url || 'https://maps.google.com/?q=Hotel+Indonesia+Kempinski+Jakarta',
-          short_date: data.short_date || '24 . 08 . 2026',
+          short_date: data.short_date || '05 . 05 . 2026',
           countdown_target: data.countdown_target || '2026-08-24T08:00:00',
           cover_image: data.cover_image || 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?q=80&w=2070&auto=format&fit=crop',
           hero_image: data.hero_image || 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?q=80&w=2070&auto=format&fit=crop',
@@ -1486,6 +1539,10 @@ export default function App() {
           wallet_name: data.wallet_name || 'DANA / GOPAY',
           wallet_number: data.wallet_number || '0812-XXXX-XXXX',
           wallet_owner: data.wallet_owner || 'Nama Mempelai',
+          footer_image: data.footer_image || '',
+          footer_image_2: data.footer_image_2 || '',
+          footer_image_3: data.footer_image_3 || '',
+          footer_image_4: data.footer_image_4 || '',
         });
       }
     } catch (err) {
@@ -1561,6 +1618,7 @@ export default function App() {
 
   return (
     <div className="font-sans text-gray-800 bg-cream min-h-screen">
+      <FallingPetals />
       <Routes>
         <Route path="/" element={
           <>

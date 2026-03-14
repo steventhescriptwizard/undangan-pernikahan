@@ -13,21 +13,129 @@
 
   --radius-custom: 12px;
 
+  /* === Existing animations === */
   --animate-fade-in: fadeIn 2s ease-in forwards;
   --animate-float: float 6s ease-in-out infinite;
   --animate-float-delayed: float 6s ease-in-out 3s infinite;
   --animate-pulse-slow: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 
+  /* === New wedding animations === */
+  --animate-shimmer: shimmer 6s ease-in-out infinite;
+  --animate-shimmer-delayed: shimmer 6s ease-in-out 3s infinite;
+  --animate-sparkle: sparkle 2.5s ease-in-out infinite;
+  --animate-sway: sway 4s ease-in-out infinite;
+  --animate-heartbeat: heartbeat 1.8s ease-in-out infinite;
+  --animate-ribbon: ribbon 8s ease-in-out infinite;
+  --animate-glow-pulse: glowPulse 5s ease-in-out infinite;
+  --animate-text-glow: textGlow 6s ease-in-out infinite;
+  --animate-slide-up: slideUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  --animate-scale-in: scaleIn 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  --animate-petal-fall-1: petalFall 8s linear infinite;
+  --animate-petal-fall-2: petalFall 11s linear 2s infinite;
+  --animate-petal-fall-3: petalFall 9s linear 4s infinite;
+  --animate-petal-fall-4: petalFall 13s linear 1s infinite;
+  --animate-petal-fall-5: petalFall 10s linear 6s infinite;
+
   @keyframes fadeIn {
-    0% { opacity: 0; transform: translateY(20px); }
+    0%   { opacity: 0; transform: translateY(20px); }
     100% { opacity: 1; transform: translateY(0); }
   }
   @keyframes float {
     0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-15px); }
+    50%       { transform: translateY(-15px); }
+  }
+
+  /* ---- Petal fall ---- */
+  @keyframes petalFall {
+    0%   { transform: translateY(-80px) translateX(0) rotate(0deg) scale(1);     opacity: 0; }
+    5%   { opacity: 0.9; }
+    85%  { opacity: 0.5; }
+    100% { transform: translateY(110vh) translateX(60px) rotate(600deg) scale(0.8); opacity: 0; }
+  }
+
+  /* ---- Gold shimmer sweep ---- */
+  @keyframes shimmer {
+    0%   { background-position: -200% center; }
+    100% { background-position: 200% center; }
+  }
+
+  /* ---- Twinkling sparkle ---- */
+  @keyframes sparkle {
+    0%, 100% { opacity: 0; transform: scale(0) rotate(0deg); }
+    30%       { opacity: 0.8; }
+    50%       { opacity: 1;   transform: scale(1) rotate(180deg); }
+    70%       { opacity: 0.6; }
+  }
+
+  /* ---- Gentle sway ---- */
+  @keyframes sway {
+    0%, 100% { transform: rotate(-3deg); }
+    50%       { transform: rotate(3deg); }
+  }
+
+  /* ---- Heartbeat ---- */
+  @keyframes heartbeat {
+    0%, 100% { transform: scale(1); }
+    14%       { transform: scale(1.14); }
+    28%       { transform: scale(1); }
+    42%       { transform: scale(1.09); }
+    70%       { transform: scale(1); }
+  }
+
+  /* ---- Ribbon wave ---- */
+  @keyframes ribbon {
+    0%, 100% { transform: scaleX(1) translateX(0); }
+    25%       { transform: scaleX(1.06) translateX(5px); }
+    75%       { transform: scaleX(0.95) translateX(-5px); }
+  }
+
+  /* ---- Ambient glow pulse ---- */
+  @keyframes glowPulse {
+    0%, 100% { box-shadow: 0 0 20px rgba(197,168,128,0.1), 0 0 40px rgba(197,168,128,0.05); }
+    50%       { box-shadow: 0 0 50px rgba(197,168,128,0.4), 0 0 90px rgba(197,168,128,0.15); }
+  }
+
+  /* ---- Text glow ---- */
+  @keyframes textGlow {
+    0%, 100% { text-shadow: 0 0 10px rgba(197,168,128,0); }
+    50%       { text-shadow: 0 0 30px rgba(197,168,128,0.4), 0 0 50px rgba(197,168,128,0.2); }
+  }
+
+  /* ---- Slide up entrance ---- */
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(40px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ---- Scale in entrance ---- */
+  @keyframes scaleIn {
+    from { opacity: 0; transform: scale(0.85); }
+    to   { opacity: 1; transform: scale(1); }
+  }
+
+  /* ---- Stagger fade for list items ---- */
+  @keyframes staggerFade {
+    from { opacity: 0; transform: translateX(-20px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+
+  /* ---- Soft bounce ---- */
+  @keyframes softBounce {
+    0%, 100% { transform: translateY(0); }
+    40%       { transform: translateY(-10px); }
+    60%       { transform: translateY(-6px); }
+  }
+
+  /* ---- Typing cursor ---- */
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0; }
   }
 }
 
+/* ============================================
+   BASE
+   ============================================ */
 body {
   background-color: var(--color-cream);
   color: var(--color-ink);
@@ -35,13 +143,112 @@ body {
   scroll-behavior: smooth;
 }
 
-/* Hide scrollbar for all elements */
 * {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+*::-webkit-scrollbar { display: none; }
+
+/* ============================================
+   WEDDING UTILITY CLASSES
+   ============================================ */
+
+/* Gold shimmer text */
+.text-shimmer {
+  background: linear-gradient(
+    90deg,
+    #C5A880 0%,
+    #f5e6b8 30%,
+    #D4AF37 50%,
+    #f5e6b8 70%,
+    #C5A880 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: var(--animate-shimmer);
 }
 
-/* Hide scrollbar for Chrome, Safari and Opera */
-*::-webkit-scrollbar {
-  display: none;
+.text-shimmer-delayed {
+  background: linear-gradient(
+    90deg,
+    #C5A880 0%,
+    #f5e6b8 30%,
+    #D4AF37 50%,
+    #f5e6b8 70%,
+    #C5A880 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: var(--animate-shimmer-delayed);
+}
+
+/* Sparkle dot */
+.sparkle-dot {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  animation: var(--animate-sparkle);
+}
+
+/* Petal particle */
+.petal {
+  position: fixed;
+  top: -80px;
+  pointer-events: none;
+  z-index: 50;
+  will-change: transform, opacity;
+}
+.petal-1  { left: 8%;   animation: var(--animate-petal-fall-1); }
+.petal-2  { left: 18%;  animation: var(--animate-petal-fall-2); }
+.petal-3  { left: 30%;  animation: var(--animate-petal-fall-3); }
+.petal-4  { left: 45%;  animation: var(--animate-petal-fall-4); }
+.petal-5  { left: 58%;  animation: var(--animate-petal-fall-5); }
+.petal-6  { left: 70%;  animation: var(--animate-petal-fall-1); animation-delay: 3s; }
+.petal-7  { left: 82%;  animation: var(--animate-petal-fall-2); animation-delay: 5s; }
+.petal-8  { left: 92%;  animation: var(--animate-petal-fall-3); animation-delay: 7s; }
+
+/* Animation utilities */
+.animate-sway        { animation: var(--animate-sway); }
+.animate-heartbeat   { animation: var(--animate-heartbeat); }
+.animate-ribbon      { animation: var(--animate-ribbon); }
+.animate-glow-pulse  { animation: var(--animate-glow-pulse); }
+.animate-text-glow   { animation: var(--animate-text-glow); }
+.animate-slide-up    { animation: var(--animate-slide-up); }
+.animate-scale-in    { animation: var(--animate-scale-in); }
+
+/* Shimmer border overlay */
+.shimmer-border {
+  position: relative;
+  overflow: hidden;
+}
+.shimmer-border::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 40%, rgba(197,168,128,0.2) 50%, transparent 60%);
+  background-size: 200% 200%;
+  animation: shimmer 2.5s ease-in-out infinite;
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+/* Decorative divider line that animates */
+.divider-animate {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #C5A880, transparent);
+  animation: var(--animate-ribbon);
+}
+
+/* Soft bounce helper */
+.animate-soft-bounce {
+  animation: softBounce 2s ease-in-out infinite;
+}
+
+/* Cursor blink */
+.animate-blink {
+  animation: blink 1s step-end infinite;
 }

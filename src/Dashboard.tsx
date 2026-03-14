@@ -204,16 +204,20 @@ export const Dashboard = ({ messages }: DashboardProps) => {
     bank_owner: 'Nama Mempelai',
     akad_time: '08:00 WIB - Selesai',
     akad_place: 'Masjid Istiqlal Jakarta',
-    akad_address: 'Jl. Taman Wijaya Kusuma, Ps. Baru, Kec. Sawah Besar, Jakarta Pusat',
+    akad_address: 'RT.01 RW01, Ringin Sari, Tamanmartani, Kalasan, Sleman Regency, Special Region of Yogyakarta 55571',
     akad_maps_url: 'https://maps.google.com/?q=Masjid+Istiqlal+Jakarta',
     resepsi_time: '11:00 WIB - 14:00 WIB',
     resepsi_place: 'Hotel Indonesia Kempinski',
     resepsi_address: 'Jl. M.H. Thamrin No.1, Menteng, Kec. Menteng, Kota Jakarta Pusat',
     resepsi_maps_url: 'https://maps.google.com/?q=Hotel+Indonesia+Kempinski+Jakarta',
-    short_date: '24 . 08 . 2026',
+    short_date: '05 . 05 . 2026',
     countdown_target: '2026-08-24T08:00:00',
     cover_image: 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?q=80&w=2070&auto=format&fit=crop',
     hero_image: 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?q=80&w=2070&auto=format&fit=crop',
+    footer_image: '',
+    footer_image_2: '',
+    footer_image_3: '',
+    footer_image_4: '',
     streaming_url: '',
     gift_qr_url: '',
     gallery_images: [],
@@ -381,16 +385,20 @@ export const Dashboard = ({ messages }: DashboardProps) => {
           bank_owner: data.bank_owner || 'Nama Mempelai',
           akad_time: data.akad_time || '08:00 WIB - Selesai',
           akad_place: data.akad_place || 'Masjid Istiqlal Jakarta',
-          akad_address: data.akad_address || 'Jl. Taman Wijaya Kusuma, Ps. Baru, Kec. Sawah Besar, Jakarta Pusat',
+          akad_address: data.akad_address || 'RT.01 RW01, Ringin Sari, Tamanmartani, Kalasan, Sleman Regency, Special Region of Yogyakarta 55571',
           akad_maps_url: data.akad_maps_url || 'https://maps.google.com/?q=Masjid+Istiqlal+Jakarta',
           resepsi_time: data.resepsi_time || '11:00 WIB - 14:00 WIB',
           resepsi_place: data.resepsi_place || 'Hotel Indonesia Kempinski',
           resepsi_address: data.resepsi_address || 'Jl. M.H. Thamrin No.1, Menteng, Kota Jakarta Pusat',
           resepsi_maps_url: data.resepsi_maps_url || 'https://maps.google.com/?q=Hotel+Indonesia+Kempinski+Jakarta',
-          short_date: data.short_date || '24 . 08 . 2026',
+          short_date: data.short_date || '05 . 05 . 2026',
           countdown_target: data.countdown_target || '2026-08-24T08:00:00',
           cover_image: data.cover_image || 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?q=80&w=2070&auto=format&fit=crop',
           hero_image: data.hero_image || 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?q=80&w=2070&auto=format&fit=crop',
+          footer_image: data.footer_image || '',
+          footer_image_2: data.footer_image_2 || '',
+          footer_image_3: data.footer_image_3 || '',
+          footer_image_4: data.footer_image_4 || '',
           streaming_url: data.streaming_url || '',
           gift_qr_url: data.gift_qr_url || '',
           gallery_images: Array.isArray(data.gallery_images) ? data.gallery_images : [],
@@ -1082,7 +1090,7 @@ export const Dashboard = ({ messages }: DashboardProps) => {
                     </div>
                     <div className="space-y-2">
                       <label className="text-sm font-medium text-slate-700">Short Date (Display)</label>
-                      <input type="text" value={settings.short_date} onChange={(e) => setSettings({...settings, short_date: e.target.value})} className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand/20 outline-none" placeholder="24 . 08 . 2026" />
+                      <input type="text" value={settings.short_date} onChange={(e) => setSettings({...settings, short_date: e.target.value})} className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand/20 outline-none" placeholder="05 . 05 . 2026" />
                     </div>
                   </div>
 
@@ -1097,7 +1105,7 @@ export const Dashboard = ({ messages }: DashboardProps) => {
                   
                   <div className="space-y-6">
                     <div className="p-6 bg-brand/5 rounded-2xl border border-brand/10 space-y-4">
-                      <h4 className="font-medium text-brand">Akad Nikah</h4>
+                      <h4 className="font-medium text-brand">Ngunduh Manten</h4>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="space-y-2">
                           <label className="text-xs font-semibold text-slate-500 uppercase">Waktu</label>
@@ -1144,12 +1152,16 @@ export const Dashboard = ({ messages }: DashboardProps) => {
                   <hr className="border-slate-100" />
 
                   <h3 className="font-serif text-2xl text-ink">Visuals & Media</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                     <div className="space-y-4">
                       <label className="text-sm font-medium text-slate-700">Cover Image</label>
-                      <div className="relative group aspect-video rounded-2xl overflow-hidden bg-slate-100 border-2 border-dashed border-slate-200 hover:border-brand/50 transition-colors">
-                        {settings.cover_image && (
+                      <div className="relative group aspect-[3/4] rounded-2xl overflow-hidden bg-slate-100 border-2 border-dashed border-slate-200 hover:border-brand/50 transition-colors">
+                        {settings.cover_image ? (
                           <img src={settings.cover_image} alt="Cover Preview" className="w-full h-full object-cover" loading="lazy" />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center text-slate-300">
+                            <Image className="w-12 h-12" />
+                          </div>
                         )}
                         <label className="absolute inset-0 flex flex-col items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer text-white">
                           <Upload className="w-8 h-8 mb-2" />
@@ -1162,9 +1174,13 @@ export const Dashboard = ({ messages }: DashboardProps) => {
                     
                     <div className="space-y-4">
                       <label className="text-sm font-medium text-slate-700">Hero Image</label>
-                      <div className="relative group aspect-video rounded-2xl overflow-hidden bg-slate-100 border-2 border-dashed border-slate-200 hover:border-brand/50 transition-colors">
-                        {settings.hero_image && (
+                      <div className="relative group aspect-[3/4] rounded-2xl overflow-hidden bg-slate-100 border-2 border-dashed border-slate-200 hover:border-brand/50 transition-colors">
+                        {settings.hero_image ? (
                           <img src={settings.hero_image} alt="Hero Preview" className="w-full h-full object-cover" loading="lazy" />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center text-slate-300">
+                            <Image className="w-12 h-12" />
+                          </div>
                         )}
                         <label className="absolute inset-0 flex flex-col items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer text-white">
                           <Upload className="w-8 h-8 mb-2" />
@@ -1173,6 +1189,25 @@ export const Dashboard = ({ messages }: DashboardProps) => {
                         </label>
                       </div>
                       <input type="text" value={settings.hero_image} onChange={(e) => setSettings({...settings, hero_image: e.target.value})} className="w-full px-4 py-2 border border-slate-200 rounded-lg text-xs font-mono text-slate-500 bg-slate-50" placeholder="URL Gambar" />
+                    </div>
+
+                    <div className="space-y-4">
+                      <label className="text-sm font-medium text-slate-700">Footer Image</label>
+                      <div className="relative group aspect-[3/4] rounded-2xl overflow-hidden bg-slate-100 border-2 border-dashed border-slate-200 hover:border-brand/50 transition-colors">
+                        {settings.footer_image ? (
+                          <img src={settings.footer_image} alt="Footer Preview" className="w-full h-full object-cover" loading="lazy" />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center text-slate-300">
+                            <Image className="w-12 h-12" />
+                          </div>
+                        )}
+                        <label className="absolute inset-0 flex flex-col items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer text-white">
+                          <Upload className="w-8 h-8 mb-2" />
+                          <span className="text-xs font-medium uppercase tracking-widest">Ganti Gambar</span>
+                          <input type="file" className="hidden" accept="image/*" onChange={(e) => handleFileUpload(e, 'footer_image')} />
+                        </label>
+                      </div>
+                      <input type="text" value={settings.footer_image || ''} onChange={(e) => setSettings({...settings, footer_image: e.target.value})} className="w-full px-4 py-2 border border-slate-200 rounded-lg text-xs font-mono text-slate-500 bg-slate-50" placeholder="URL Gambar" />
                     </div>
                   </div>
                 </div>
@@ -1218,6 +1253,129 @@ export const Dashboard = ({ messages }: DashboardProps) => {
                           <label className="block text-[10px] font-sans uppercase tracking-[0.2em] text-ink/40 mb-2 ml-1">Countdown Target (ISO Format)</label>
                           <input type="text" value={settings.countdown_target} onChange={(e) => setSettings({...settings, countdown_target: e.target.value})} className="w-full px-5 py-4 rounded-2xl border border-ink/10 bg-cream/30 font-light text-ink focus:outline-none focus:border-brand/50 focus:bg-white transition-all" placeholder="2026-08-24T08:00:00" />
                         </div>
+                        <div>
+                          <label className="block text-[10px] font-sans uppercase tracking-[0.2em] text-ink/40 mb-2 ml-1">Short Date (Display)</label>
+                          <input type="text" value={settings.short_date} onChange={(e) => setSettings({...settings, short_date: e.target.value})} className="w-full px-5 py-4 rounded-2xl border border-ink/10 bg-cream/30 font-light text-ink focus:outline-none focus:border-brand/50 focus:bg-white transition-all" placeholder="05 . 05 . 2026" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="space-y-6">
+                    <h4 className="text-xs font-sans uppercase tracking-[0.2em] text-brand font-bold border-b border-brand/10 pb-2">Visuals & Media</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                      <div className="space-y-4">
+                        <label className="block text-[10px] font-sans uppercase tracking-[0.2em] text-ink/40 mb-2 ml-1">Cover Image</label>
+                        <div className="relative group aspect-[3/4] rounded-3xl overflow-hidden bg-cream/50 border-2 border-dashed border-brand/10 hover:border-brand/30 transition-all">
+                          {settings.cover_image ? (
+                            <img src={settings.cover_image} alt="Cover Preview" className="w-full h-full object-cover" loading="lazy" />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center text-ink/10">
+                              <Image className="w-12 h-12" />
+                            </div>
+                          )}
+                          <label className="absolute inset-0 flex flex-col items-center justify-center bg-ink/40 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer text-cream backdrop-blur-sm">
+                            <Upload className="w-8 h-8 mb-2" />
+                            <span className="text-[10px] font-bold uppercase tracking-widest">Update Image</span>
+                            <input type="file" className="hidden" accept="image/*" onChange={(e) => handleFileUpload(e, 'cover_image')} />
+                          </label>
+                        </div>
+                        <input type="text" value={settings.cover_image} onChange={(e) => setSettings({...settings, cover_image: e.target.value})} className="w-full px-4 py-3 rounded-xl border border-ink/5 bg-ink/5 text-[10px] font-mono text-ink/40 focus:outline-none focus:border-brand/30" placeholder="URL Gambar" />
+                      </div>
+                      
+                      <div className="space-y-4">
+                        <label className="block text-[10px] font-sans uppercase tracking-[0.2em] text-ink/40 mb-2 ml-1">Hero Image</label>
+                        <div className="relative group aspect-[3/4] rounded-3xl overflow-hidden bg-cream/50 border-2 border-dashed border-brand/10 hover:border-brand/30 transition-all">
+                          {settings.hero_image ? (
+                            <img src={settings.hero_image} alt="Hero Preview" className="w-full h-full object-cover" loading="lazy" />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center text-ink/10">
+                              <Image className="w-12 h-12" />
+                            </div>
+                          )}
+                          <label className="absolute inset-0 flex flex-col items-center justify-center bg-ink/40 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer text-cream backdrop-blur-sm">
+                            <Upload className="w-8 h-8 mb-2" />
+                            <span className="text-[10px] font-bold uppercase tracking-widest">Update Image</span>
+                            <input type="file" className="hidden" accept="image/*" onChange={(e) => handleFileUpload(e, 'hero_image')} />
+                          </label>
+                        </div>
+                        <input type="text" value={settings.hero_image} onChange={(e) => setSettings({...settings, hero_image: e.target.value})} className="w-full px-4 py-3 rounded-xl border border-ink/5 bg-ink/5 text-[10px] font-mono text-ink/40 focus:outline-none focus:border-brand/30" placeholder="URL Gambar" />
+                      </div>
+
+                      <div className="space-y-4">
+                        <label className="block text-[10px] font-sans uppercase tracking-[0.2em] text-ink/40 mb-2 ml-1">Footer Image 1</label>
+                        <div className="relative group aspect-[3/4] rounded-3xl overflow-hidden bg-cream/50 border-2 border-dashed border-brand/10 hover:border-brand/30 transition-all">
+                          {settings.footer_image ? (
+                            <img src={settings.footer_image} alt="Footer 1 Preview" className="w-full h-full object-cover" loading="lazy" />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center text-ink/10">
+                              <Image className="w-12 h-12" />
+                            </div>
+                          )}
+                          <label className="absolute inset-0 flex flex-col items-center justify-center bg-ink/40 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer text-cream backdrop-blur-sm">
+                            <Upload className="w-8 h-8 mb-2" />
+                            <span className="text-[10px] font-bold uppercase tracking-widest">Update Image</span>
+                            <input type="file" className="hidden" accept="image/*" onChange={(e) => handleFileUpload(e, 'footer_image')} />
+                          </label>
+                        </div>
+                        <input type="text" value={settings.footer_image || ''} onChange={(e) => setSettings({...settings, footer_image: e.target.value})} className="w-full px-4 py-3 rounded-xl border border-ink/5 bg-ink/5 text-[10px] font-mono text-ink/40 focus:outline-none focus:border-brand/30" placeholder="URL Gambar 1" />
+                      </div>
+
+                      <div className="space-y-4">
+                        <label className="block text-[10px] font-sans uppercase tracking-[0.2em] text-ink/40 mb-2 ml-1">Footer Image 2</label>
+                        <div className="relative group aspect-[3/4] rounded-3xl overflow-hidden bg-cream/50 border-2 border-dashed border-brand/10 hover:border-brand/30 transition-all">
+                          {settings.footer_image_2 ? (
+                            <img src={settings.footer_image_2} alt="Footer 2 Preview" className="w-full h-full object-cover" loading="lazy" />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center text-ink/10">
+                              <Image className="w-12 h-12" />
+                            </div>
+                          )}
+                          <label className="absolute inset-0 flex flex-col items-center justify-center bg-ink/40 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer text-cream backdrop-blur-sm">
+                            <Upload className="w-8 h-8 mb-2" />
+                            <span className="text-[10px] font-bold uppercase tracking-widest">Update Image</span>
+                            <input type="file" className="hidden" accept="image/*" onChange={(e) => handleFileUpload(e, 'footer_image_2')} />
+                          </label>
+                        </div>
+                        <input type="text" value={settings.footer_image_2 || ''} onChange={(e) => setSettings({...settings, footer_image_2: e.target.value})} className="w-full px-4 py-3 rounded-xl border border-ink/5 bg-ink/5 text-[10px] font-mono text-ink/40 focus:outline-none focus:border-brand/30" placeholder="URL Gambar 2" />
+                      </div>
+
+                      <div className="space-y-4">
+                        <label className="block text-[10px] font-sans uppercase tracking-[0.2em] text-ink/40 mb-2 ml-1">Footer Image 3</label>
+                        <div className="relative group aspect-[3/4] rounded-3xl overflow-hidden bg-cream/50 border-2 border-dashed border-brand/10 hover:border-brand/30 transition-all">
+                          {settings.footer_image_3 ? (
+                            <img src={settings.footer_image_3} alt="Footer 3 Preview" className="w-full h-full object-cover" loading="lazy" />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center text-ink/10">
+                              <Image className="w-12 h-12" />
+                            </div>
+                          )}
+                          <label className="absolute inset-0 flex flex-col items-center justify-center bg-ink/40 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer text-cream backdrop-blur-sm">
+                            <Upload className="w-8 h-8 mb-2" />
+                            <span className="text-[10px] font-bold uppercase tracking-widest">Update Image</span>
+                            <input type="file" className="hidden" accept="image/*" onChange={(e) => handleFileUpload(e, 'footer_image_3')} />
+                          </label>
+                        </div>
+                        <input type="text" value={settings.footer_image_3 || ''} onChange={(e) => setSettings({...settings, footer_image_3: e.target.value})} className="w-full px-4 py-3 rounded-xl border border-ink/5 bg-ink/5 text-[10px] font-mono text-ink/40 focus:outline-none focus:border-brand/30" placeholder="URL Gambar 3" />
+                      </div>
+
+                      <div className="space-y-4">
+                        <label className="block text-[10px] font-sans uppercase tracking-[0.2em] text-ink/40 mb-2 ml-1">Footer Image 4</label>
+                        <div className="relative group aspect-[3/4] rounded-3xl overflow-hidden bg-cream/50 border-2 border-dashed border-brand/10 hover:border-brand/30 transition-all">
+                          {settings.footer_image_4 ? (
+                            <img src={settings.footer_image_4} alt="Footer 4 Preview" className="w-full h-full object-cover" loading="lazy" />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center text-ink/10">
+                              <Image className="w-12 h-12" />
+                            </div>
+                          )}
+                          <label className="absolute inset-0 flex flex-col items-center justify-center bg-ink/40 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer text-cream backdrop-blur-sm">
+                            <Upload className="w-8 h-8 mb-2" />
+                            <span className="text-[10px] font-bold uppercase tracking-widest">Update Image</span>
+                            <input type="file" className="hidden" accept="image/*" onChange={(e) => handleFileUpload(e, 'footer_image_4')} />
+                          </label>
+                        </div>
+                        <input type="text" value={settings.footer_image_4 || ''} onChange={(e) => setSettings({...settings, footer_image_4: e.target.value})} className="w-full px-4 py-3 rounded-xl border border-ink/5 bg-ink/5 text-[10px] font-mono text-ink/40 focus:outline-none focus:border-brand/30" placeholder="URL Gambar 4" />
                       </div>
                     </div>
                   </div>
@@ -1226,7 +1384,7 @@ export const Dashboard = ({ messages }: DashboardProps) => {
                     <h4 className="text-xs font-sans uppercase tracking-[0.2em] text-brand font-bold border-b border-brand/10 pb-2">Lokasi & Acara</h4>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                       <div className="space-y-4">
-                        <p className="text-[10px] font-bold text-ink/20 uppercase tracking-widest">Akad Nikah</p>
+                        <p className="text-[10px] font-bold text-ink/20 uppercase tracking-widest">Ngunduh Manten</p>
                         <div>
                           <label className="block text-[10px] font-sans uppercase tracking-[0.2em] text-ink/40 mb-2 ml-1">Waktu Akad</label>
                           <input type="text" value={settings.akad_time} onChange={(e) => setSettings({...settings, akad_time: e.target.value})} className="w-full px-5 py-4 rounded-2xl border border-ink/10 bg-cream/30 font-light text-ink focus:outline-none focus:border-brand/50 focus:bg-white transition-all" />
