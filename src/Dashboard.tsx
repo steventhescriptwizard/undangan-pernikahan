@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import * as XLSX from 'xlsx';
 import { motion } from 'motion/react';
-import { Users, MessageSquare, CheckCircle, XCircle, Settings, Home, LogOut, LayoutDashboard, Mail, Lock, ArrowRight, Save, CheckCircle2, UserPlus, Copy, Send, Trash2, Menu, X, Upload, Plus, Image, Heart, Wallet, Globe, ChevronDown, ChevronRight, Share2, Calendar } from 'lucide-react';
+import { Users, MessageSquare, CheckCircle, XCircle, Settings, Home, LogOut, LayoutDashboard, Mail, Lock, ArrowRight, Save, CheckCircle2, UserPlus, Copy, Send, Trash2, Menu, X, Upload, Plus, Image, Heart, Wallet, Globe, ChevronDown, ChevronRight, ChevronLeft, Share2, Calendar, Search } from 'lucide-react';
 import { Message } from './App';
 import { Link, useNavigate } from 'react-router-dom';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip as RechartsTooltip, Legend } from 'recharts';
@@ -20,6 +21,7 @@ const MAX_ATTEMPTS = 3;
 const LOCKOUT_DURATION_MS = 5 * 60 * 1000; // 5 minutes
 const LOCKOUT_KEY = 'wedding_login_locked_until';
 const ATTEMPTS_KEY = 'wedding_login_attempts';
+const PAGE_SIZE = 10;
 
 export const Login = ({ onLogin }: { onLogin: () => void }) => {
   const [email, setEmail] = useState('');
@@ -187,6 +189,74 @@ export const Login = ({ onLogin }: { onLogin: () => void }) => {
   );
 };
 
+const Pagination = ({ 
+  currentPage, 
+  totalItems, 
+  pageSize, 
+  onPageChange 
+}: { 
+  currentPage: number, 
+  totalItems: number, 
+  pageSize: number, 
+  onPageChange: (page: number) => void 
+}) => {
+  const totalPages = Math.ceil(totalItems / pageSize);
+  
+  if (totalPages <= 1) return null;
+
+  return (
+    <div className="flex items-center justify-center gap-2 mt-8">
+      <button
+        onClick={() => onPageChange(currentPage - 1)}
+        disabled={currentPage === 1}
+        className="p-2 rounded-xl bg-white border border-brand/20 text-ink hover:bg-brand/5 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+      >
+        <ChevronLeft className="w-5 h-5" />
+      </button>
+      
+      <div className="flex items-center gap-1">
+        {[...Array(totalPages)].map((_, i) => {
+          const page = i + 1;
+          // Show only current, first, last, and neighbors if many pages
+          if (
+            totalPages > 7 &&
+            page !== 1 &&
+            page !== totalPages &&
+            Math.abs(page - currentPage) > 1
+          ) {
+            if (page === 2 || page === totalPages - 1) {
+              return <span key={page} className="px-2 text-ink/30">...</span>;
+            }
+            return null;
+          }
+
+          return (
+            <button
+              key={page}
+              onClick={() => onPageChange(page)}
+              className={`w-10 h-10 rounded-xl font-medium transition-all ${
+                currentPage === page 
+                  ? 'bg-brand text-white shadow-lg shadow-brand/20' 
+                  : 'bg-white border border-brand/10 text-ink/60 hover:bg-brand/5'
+              }`}
+            >
+              {page}
+            </button>
+          );
+        })}
+      </div>
+
+      <button
+        onClick={() => onPageChange(currentPage + 1)}
+        disabled={currentPage === totalPages}
+        className="p-2 rounded-xl bg-white border border-brand/20 text-ink hover:bg-brand/5 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+      >
+        <ChevronRight className="w-5 h-5" />
+      </button>
+    </div>
+  );
+};
+
 export const Dashboard = ({ messages }: DashboardProps) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [authLoading, setAuthLoading] = useState(true);
@@ -238,6 +308,11 @@ export const Dashboard = ({ messages }: DashboardProps) => {
   // Search & Filter state
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<'All' | 'Hadir' | 'Tidak Hadir'>('All');
+  const [currentPageGuests, setCurrentPageGuests] = useState(1);
+  
+  // Invited Guests search & pagination state
+  const [searchTermInvited, setSearchTermInvited] = useState('');
+  const [currentPageInvited, setCurrentPageInvited] = useState(1);
   
   const filteredMessages = messages.filter(msg => {
     const matchesSearch = msg.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
@@ -245,6 +320,30 @@ export const Dashboard = ({ messages }: DashboardProps) => {
     const matchesStatus = statusFilter === 'All' || msg.attend === statusFilter;
     return matchesSearch && matchesStatus;
   });
+
+  const paginatedMessages = filteredMessages.slice(
+    (currentPageGuests - 1) * PAGE_SIZE,
+    currentPageGuests * PAGE_SIZE
+  );
+
+  const filteredInvitedGuests = invitedGuests.filter(guest => 
+    guest.name.toLowerCase().includes(searchTermInvited.toLowerCase()) ||
+    (guest.phone && guest.phone.includes(searchTermInvited))
+  );
+
+  const paginatedInvitedGuests = filteredInvitedGuests.slice(
+    (currentPageInvited - 1) * PAGE_SIZE,
+    currentPageInvited * PAGE_SIZE
+  );
+
+  // Reset page on search/filter
+  useEffect(() => {
+    setCurrentPageGuests(1);
+  }, [searchTerm, statusFilter]);
+
+  useEffect(() => {
+    setCurrentPageInvited(1);
+  }, [searchTermInvited]);
 
   // Check Supabase auth session on mount
   useEffect(() => {
@@ -315,6 +414,60 @@ export const Dashboard = ({ messages }: DashboardProps) => {
     } finally {
       setIsAddingGuest(false);
     }
+  };
+
+  const handleImportExcel = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = async (evt) => {
+      try {
+        const bstr = evt.target?.result;
+        const wb = XLSX.read(bstr, { type: 'binary' });
+        const wsname = wb.SheetNames[0];
+        const ws = wb.Sheets[wsname];
+        const data = XLSX.utils.sheet_to_json(ws) as any[];
+
+        if (data.length === 0) {
+          Swal.fire('Info', 'File Excel kosong', 'info');
+          return;
+        }
+
+        setIsAddingGuest(true);
+        const guestsToInsert = data.map(item => {
+          const name = item.Nama || item.nama || item['Nama Tamu'] || item.name || Object.values(item)[0];
+          const phone = item.WhatsApp || item.whatsapp || item.Phone || item.phone || item['Nomor WhatsApp'] || Object.values(item)[1] || '';
+          return {
+            name: String(name),
+            phone: String(phone),
+            slug: String(name).toLowerCase().replace(/\s+/g, '-')
+          };
+        }).filter(g => g.name);
+
+        const { error } = await supabase
+          .from('invited_guests')
+          .insert(guestsToInsert);
+
+        if (error) throw error;
+
+        Swal.fire({
+          icon: 'success',
+          title: 'Berhasil',
+          text: `${guestsToInsert.length} tamu berhasil diimport`,
+          confirmButtonColor: '#C5A880'
+        });
+        
+        fetchInvitedGuests();
+      } catch (err: any) {
+        console.error('Error importing excel:', err);
+        Swal.fire('Gagal', 'Gagal membaca atau menyimpan data dari Excel: ' + err.message, 'error');
+      } finally {
+        setIsAddingGuest(false);
+        if (e.target) e.target.value = ''; // Reset input
+      }
+    };
+    reader.readAsBinaryString(file);
   };
 
   const handleDeleteGuest = async (id: string) => {
@@ -1004,7 +1157,7 @@ export const Dashboard = ({ messages }: DashboardProps) => {
                       </tr>
                     </thead>
                     <tbody>
-                      {filteredMessages.map((msg) => (
+                      {paginatedMessages.map((msg) => (
                         <tr key={msg.id} className="border-b border-ink/5 last:border-0 hover:bg-ink/5 transition-colors">
                           <td className="py-4 font-medium text-ink">{msg.name}</td>
                           <td className="py-4">
@@ -1021,7 +1174,7 @@ export const Dashboard = ({ messages }: DashboardProps) => {
 
                   {/* Mobile Cards */}
                   <div className="space-y-4 md:hidden">
-                    {filteredMessages.map((msg) => (
+                    {paginatedMessages.map((msg) => (
                       <div key={msg.id} className="p-4 rounded-2xl border border-ink/5 bg-ink/5 hover:bg-brand/5 transition-colors">
                         <div className="flex justify-between items-start mb-2">
                           <h4 className="font-medium text-ink">{msg.name}</h4>
@@ -1042,6 +1195,13 @@ export const Dashboard = ({ messages }: DashboardProps) => {
                     </div>
                   )}
                 </div>
+
+                <Pagination 
+                  currentPage={currentPageGuests}
+                  totalItems={filteredMessages.length}
+                  pageSize={PAGE_SIZE}
+                  onPageChange={setCurrentPageGuests}
+                />
               </div>
             )}
 
@@ -1670,9 +1830,27 @@ export const Dashboard = ({ messages }: DashboardProps) => {
 
                 {/* Invited Guests Table */}
                 <div className="bg-white p-8 rounded-3xl shadow-xl shadow-ink/5 border border-brand/10">
-                  <div className="flex justify-between items-center mb-8">
+                  <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
                     <h3 className="font-serif text-2xl text-ink">Daftar Undangan</h3>
-                    <div className="text-sm text-ink/50 bg-ink/5 px-4 py-2 rounded-full">Total: {invitedGuests.length} Orang</div>
+                    <div className="flex flex-wrap items-center gap-4 w-full md:w-auto">
+                      <div className="relative flex-1 md:w-64">
+                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-ink/30" />
+                        <input 
+                          type="text" 
+                          placeholder="Cari nama tamu..."
+                          value={searchTermInvited}
+                          onChange={(e) => setSearchTermInvited(e.target.value)}
+                          className="w-full pl-11 pr-4 py-2 rounded-xl border border-ink/10 bg-cream/30 text-sm focus:outline-none focus:border-brand/50"
+                        />
+                      </div>
+                      <label className="flex items-center gap-2 px-4 py-2 bg-green-600/10 text-green-600 rounded-full text-xs font-sans uppercase tracking-widest cursor-pointer hover:bg-green-600/20 transition-all border border-green-600/20 shadow-sm">
+                        <Upload className="w-3.5 h-3.5" /> Import Excel
+                        <input type="file" className="hidden" accept=".xlsx, .xls" onChange={handleImportExcel} />
+                      </label>
+                      <div className="text-sm text-ink/50 bg-ink/5 px-4 py-2 rounded-full border border-ink/10">
+                        {filteredInvitedGuests.length} {filteredInvitedGuests.length !== invitedGuests.length && `dari ${invitedGuests.length}`} Orang
+                      </div>
+                    </div>
                   </div>
                   <div className="overflow-x-auto">
                     <table className="w-full text-left border-collapse">
@@ -1684,7 +1862,7 @@ export const Dashboard = ({ messages }: DashboardProps) => {
                         </tr>
                       </thead>
                       <tbody>
-                        {invitedGuests.map((guest) => (
+                        {paginatedInvitedGuests.map((guest) => (
                           <tr key={guest.id} className="border-b border-ink/5 last:border-0 hover:bg-ink/5 transition-colors">
                             <td className="py-4">
                               <p className="font-medium text-ink">{guest.name}</p>
@@ -1737,6 +1915,13 @@ export const Dashboard = ({ messages }: DashboardProps) => {
                       </tbody>
                     </table>
                   </div>
+
+                  <Pagination 
+                    currentPage={currentPageInvited}
+                    totalItems={filteredInvitedGuests.length}
+                    pageSize={PAGE_SIZE}
+                    onPageChange={setCurrentPageInvited}
+                  />
                 </div>
               </div>
             )}
