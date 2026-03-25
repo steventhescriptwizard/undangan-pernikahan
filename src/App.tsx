@@ -89,109 +89,29 @@ export const Cover = ({ isOpened, onOpen, settings }: CoverProps) => {
     <AnimatePresence>
       {!isOpened && (
         <motion.div
-          initial={{ y: 0, opacity: 1, scale: 1, filter: "blur(0px)" }}
-          exit={{ 
-            y: '-100%', 
-            opacity: 0, 
-            scale: 1.1, 
-            filter: "blur(20px)",
-          }}
-          transition={{ 
-            duration: 1.3, 
-            ease: [0.22, 1, 0.36, 1] 
-          }}
-          className="fixed inset-0 z-[100] overflow-y-auto overflow-x-hidden bg-maroon" >
-          
-          <FallingPetals />
+          initial={{ y: 0 }}
+          exit={{ y: '-100%', opacity: 0 }}
+          transition={{ duration: 1, ease: [0.83, 0, 0.39, 1] }}
+          className="fixed inset-0 z-[100] overflow-y-auto overflow-x-hidden" style={{ background: 'linear-gradient(135deg, #f5f0e8 0%, #ede8df 50%, #e8dfd5 100%)' }}>
 
-          {/* Corner Ornaments — bunga 01.svg × 4 corners */}
-          {/* Top Left */}
-          <motion.img
-            src="/assets/ornamen/bunga 01.svg"
-            alt="Ornamen pojok kiri atas"
-            className="fixed top-0 left-0 w-24 md:w-32 lg:w-40 pointer-events-none"
-            style={{ transformOrigin: 'top left' }}
-            initial={{ opacity: 0, x: -40, y: -40, rotate: -15, scale: 0.8 }}
-            animate={{
-              opacity: 0.75,
-              x: 0,
-              y: [0, -10, 0, -6, 0],
-              rotate: [-4, 2, -4],
-              scale: 1,
-            }}
-            transition={{
-              opacity: { duration: 1.6, delay: 0.5, ease: 'easeOut' },
-              x: { duration: 1.6, delay: 0.5, ease: 'easeOut' },
-              y: { duration: 7, delay: 2.0, repeat: Infinity, ease: 'easeInOut' },
-              rotate: { duration: 10, delay: 2.0, repeat: Infinity, ease: 'easeInOut' },
-              scale: { duration: 1.6, delay: 0.5, ease: 'easeOut' },
-            }}
+          {/* Floral Corner Decorations (Top Left & Bottom Right) */}
+          <motion.img 
+            initial={{ opacity: 0, x: -50, y: -50 }}
+            animate={{ opacity: 0.4, x: 0, y: 0 }}
+            transition={{ duration: 1.8, delay: 0.6, ease: "easeOut" }}
+            src="/assets/floral-top-left.png" 
+            alt="Floral decoration" 
+            className="fixed -top-5 -left-5 w-64 h-64 object-cover rounded-full mix-blend-multiply pointer-events-none"
+            referrerPolicy="no-referrer"
           />
-          {/* Top Right */}
-          <motion.img
-            src="/assets/ornamen/bunga 01.svg"
-            alt="Ornamen pojok kanan atas"
-            className="fixed top-0 right-0 w-24 md:w-32 lg:w-40 pointer-events-none"
-            style={{ transformOrigin: 'top right', transform: 'scaleX(-1)' }}
-            initial={{ opacity: 0, x: 40, y: -40, rotate: 15, scale: 0.8 }}
-            animate={{
-              opacity: 0.75,
-              x: 0,
-              y: [0, -8, 0, -5, 0],
-              rotate: [3, -3, 3],
-              scale: 1,
-            }}
-            transition={{
-              opacity: { duration: 1.6, delay: 0.7, ease: 'easeOut' },
-              x: { duration: 1.6, delay: 0.7, ease: 'easeOut' },
-              y: { duration: 8, delay: 2.3, repeat: Infinity, ease: 'easeInOut' },
-              rotate: { duration: 11, delay: 2.3, repeat: Infinity, ease: 'easeInOut' },
-              scale: { duration: 1.6, delay: 0.7, ease: 'easeOut' },
-            }}
-          />
-          {/* Bottom Left */}
-          <motion.img
-            src="/assets/ornamen/bunga 01.svg"
-            alt="Ornamen pojok kiri bawah"
-            className="fixed bottom-0 left-0 w-24 md:w-32 lg:w-40 pointer-events-none"
-            style={{ transformOrigin: 'bottom left', transform: 'scaleY(-1)' }}
-            initial={{ opacity: 0, x: -40, y: 40, rotate: 10, scale: 0.8 }}
-            animate={{
-              opacity: 0.75,
-              x: 0,
-              y: [0, 10, 0, 6, 0],
-              rotate: [4, -2, 4],
-              scale: 1,
-            }}
-            transition={{
-              opacity: { duration: 1.6, delay: 0.9, ease: 'easeOut' },
-              x: { duration: 1.6, delay: 0.9, ease: 'easeOut' },
-              y: { duration: 9, delay: 2.6, repeat: Infinity, ease: 'easeInOut' },
-              rotate: { duration: 12, delay: 2.6, repeat: Infinity, ease: 'easeInOut' },
-              scale: { duration: 1.6, delay: 0.9, ease: 'easeOut' },
-            }}
-          />
-          {/* Bottom Right */}
-          <motion.img
-            src="/assets/ornamen/bunga 01.svg"
-            alt="Ornamen pojok kanan bawah"
-            className="fixed bottom-0 right-0 w-24 md:w-32 lg:w-40 pointer-events-none"
-            style={{ transformOrigin: 'bottom right', transform: 'scale(-1, -1)' }}
-            initial={{ opacity: 0, x: 40, y: 40, rotate: -10, scale: 0.8 }}
-            animate={{
-              opacity: 0.75,
-              x: 0,
-              y: [0, 8, 0, 5, 0],
-              rotate: [-3, 3, -3],
-              scale: 1,
-            }}
-            transition={{
-              opacity: { duration: 1.6, delay: 1.1, ease: 'easeOut' },
-              x: { duration: 1.6, delay: 1.1, ease: 'easeOut' },
-              y: { duration: 10, delay: 2.9, repeat: Infinity, ease: 'easeInOut' },
-              rotate: { duration: 13, delay: 2.9, repeat: Infinity, ease: 'easeInOut' },
-              scale: { duration: 1.6, delay: 1.1, ease: 'easeOut' },
-            }}
+          <motion.img 
+            initial={{ opacity: 0, x: 50, y: 50 }}
+            animate={{ opacity: 0.4, x: 0, y: 0 }}
+            transition={{ duration: 1.8, delay: 0.6, ease: "easeOut" }}
+            src="/assets/floral-bottom-right.png" 
+            alt="Floral decoration" 
+            className="fixed -bottom-5 -right-5 w-64 h-64 object-cover rounded-full mix-blend-multiply pointer-events-none"
+            referrerPolicy="no-referrer"
           />
 
           <div className="w-full min-h-full flex items-center justify-center py-10">
@@ -200,39 +120,39 @@ export const Cover = ({ isOpened, onOpen, settings }: CoverProps) => {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1.2, delay: 0.8, ease: "easeOut" }}
-              className="relative w-[85%] max-w-sm lg:max-w-md h-auto bg-cream/85 backdrop-blur-md border border-white/60 rounded-t-[200px] rounded-b-2xl shadow-2xl shadow-black/40 flex flex-col items-center pt-12 pb-8 md:pt-14 md:pb-10 px-4 md:px-6 text-ink isolate"
+              className="relative w-[85%] max-w-sm lg:max-w-md h-auto bg-cream rounded-t-[200px] rounded-b-2xl shadow-xl shadow-ink/10 flex flex-col items-center pt-12 pb-8 md:pt-14 md:pb-10 px-4 md:px-6 text-ink isolate"
             >
               <SparkleAccent count={6} />
               
               {/* Top Text */}
               <motion.div 
-                initial={{ opacity: 0, x: -30 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 1.2, delay: 1.2, ease: [0.22, 1, 0.36, 1] }}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 1.2 }}
                 className="text-center mb-4 md:mb-5 z-10 mt-2"
               >
-                <p className="text-[9px] md:text-[10px] uppercase tracking-[0.2em] font-sans font-medium text-ink/60 leading-relaxed">
+                <p className="text-[9px] md:text-[10px] uppercase tracking-[0.2em] font-sans font-medium text-ink/80 leading-relaxed">
                   UNDANGAN
                 </p>
               </motion.div>
 
               {/* Names */}
               <motion.div 
-                initial={{ opacity: 0, x: 30 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 1.2, delay: 1.4, ease: [0.22, 1, 0.36, 1] }}
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 1, delay: 1.4 }}
                 className="text-center mb-4 md:mb-6 z-10"
               >
-                <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl text-maroon leading-none transform -rotate-2">
-                  {settings.groom_name} <span className="text-2xl md:text-3xl lg:text-4xl text-maroon">&</span><br/>{settings.bride_name}
+                <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl text-ink leading-none transform -rotate-2">
+                  <span className="text-shimmer">{settings.groom_name}</span> <span className="text-2xl md:text-3xl lg:text-4xl text-brand">&</span><br/><span className="text-shimmer-delayed">{settings.bride_name}</span>
                 </h1>
               </motion.div>
 
               {/* Middle Text */}
               <motion.div 
-                initial={{ opacity: 0, x: -30 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 1.2, delay: 1.6, ease: [0.22, 1, 0.36, 1] }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.8, delay: 1.6 }}
                 className="text-center mb-6 md:mb-8 z-10"
               >
                 <p className="text-[8px] md:text-[9px] uppercase tracking-[0.2em] font-sans font-medium text-ink/80 leading-relaxed">
@@ -242,12 +162,12 @@ export const Cover = ({ isOpened, onOpen, settings }: CoverProps) => {
 
               {/* Date & Time */}
               <motion.div 
-                initial={{ opacity: 0, x: 30 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 1.2, delay: 1.8, ease: [0.22, 1, 0.36, 1] }}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 1.8 }}
                 className="text-center mb-6 md:mb-8 z-10 flex flex-col items-center"
               >
-                <p className="text-[10px] md:text-xs tracking-[0.2em] uppercase font-sans font-semibold text-maroon mb-3">Ngunduh Mantu</p>
+                <p className="text-[10px] md:text-xs tracking-[0.2em] uppercase font-sans font-semibold text-ink mb-3">Ngunduh Mantu</p>
                 <div className="flex flex-col items-center gap-2 text-ink">
                   <p className="text-xs md:text-sm font-serif font-medium uppercase tracking-[0.1em]">{settings.event_date}</p>
                   <div className="w-8 h-px bg-brand/50 my-1"></div>
@@ -257,9 +177,9 @@ export const Cover = ({ isOpened, onOpen, settings }: CoverProps) => {
 
               {/* Location */}
               <motion.div 
-                initial={{ opacity: 0, x: -30 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 1.2, delay: 2.0, ease: [0.22, 1, 0.36, 1] }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.8, delay: 2.0 }}
                 className="text-center mb-5 md:mb-6 z-10"
               >
                 <p className="text-[8px] md:text-[9px] uppercase tracking-[0.2em] font-sans font-medium text-ink/80 max-w-[200px] leading-relaxed mx-auto">
@@ -269,17 +189,17 @@ export const Cover = ({ isOpened, onOpen, settings }: CoverProps) => {
 
               {/* Guest Info & Button */}
               <motion.div 
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 1.2, delay: 2.2, ease: [0.22, 1, 0.36, 1] }}
-                className="w-full flex flex-col items-center mt-auto z-10 bg-maroon/5 backdrop-blur-sm p-4 rounded-xl border border-maroon/10"
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.8, delay: 2.2 }}
+                className="w-full flex flex-col items-center mt-auto z-10 bg-white/40 backdrop-blur-sm p-4 rounded-xl border border-white/50"
               >
                 <p className="text-[8px] md:text-[9px] uppercase tracking-[0.3em] text-ink/60 mb-1">Kepada Yth.</p>
-                <p className="font-serif text-base md:text-lg font-medium text-maroon mb-4 text-center">{guestName}</p>
+                <p className="font-serif text-base md:text-lg font-medium text-ink mb-4 text-center">{guestName}</p>
                 
                 <button 
                   onClick={onOpen}
-                  className="group relative inline-flex items-center justify-center px-6 md:px-8 py-2.5 md:py-3 overflow-hidden rounded-full bg-maroon text-cream font-sans text-[9px] md:text-[10px] uppercase tracking-[0.2em] transition-all hover:scale-105 hover:shadow-xl cursor-pointer"
+                  className="group relative inline-flex items-center justify-center px-6 md:px-8 py-2.5 md:py-3 overflow-hidden rounded-full bg-brand text-cream font-sans text-[9px] md:text-[10px] uppercase tracking-[0.2em] transition-all hover:scale-105 hover:shadow-xl cursor-pointer"
                 >
                   <span className="relative z-10 flex items-center gap-2">
                     <MailOpen className="w-3 h-3 md:w-3.5 md:h-3.5" /> Buka Undangan
@@ -319,31 +239,7 @@ const Hero = ({ settings }: { settings: SiteSettings }) => (
       <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-dustyrose/10 blur-3xl animate-pulse-slow" style={{ animationDelay: '2s' }}></div>
     </div>
 
-    {/* Corner Ornaments */}
-    <motion.img
-      src="/assets/ornamen/ornamen%20kiri%20atas.svg"
-      alt="Ornament Top Left"
-      initial={{ opacity: 0, x: -20, y: -20 }}
-      animate={{ opacity: 0.6, x: 0, y: 0 }}
-      transition={{ duration: 1.5, ease: "easeOut", delay: 0.3 }}
-      className="absolute top-2 left-2 md:top-6 md:left-6 w-14 md:w-20 lg:w-28 pointer-events-none z-0 animate-float"
-    />
-    <motion.img
-      src="/assets/ornamen/ornamen%20kanan%20atas.svg"
-      alt="Ornament Top Right"
-      initial={{ opacity: 0, x: 20, y: -20 }}
-      animate={{ opacity: 0.6, x: 0, y: 0 }}
-      transition={{ duration: 1.5, ease: "easeOut", delay: 0.5 }}
-      className="absolute top-2 right-2 md:top-6 md:right-6 w-14 md:w-20 lg:w-28 pointer-events-none z-0 animate-sway origin-top-right"
-    />
-    <motion.img
-      src="/assets/ornamen/ornamen%20kiri%20bawah.svg"
-      alt="Ornament Bottom Left"
-      initial={{ opacity: 0, x: -20, y: 20 }}
-      animate={{ opacity: 0.6, x: 0, y: 0 }}
-      transition={{ duration: 1.5, ease: "easeOut", delay: 0.7 }}
-      className="absolute bottom-2 left-2 md:bottom-6 md:left-6 w-14 md:w-20 lg:w-28 pointer-events-none z-0 animate-sway origin-bottom-left"
-    />
+    <img alt="Floral Decor" className="absolute w-[200px] md:w-[350px] z-10 pointer-events-none opacity-30 top-0 left-0 -translate-x-1/4 -translate-y-1/4" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD_aMoToPSucJpdTXtHz4V7BhR1ZpR4O1wSauqJRycLe9I22NAq3_7JOVNjMt945LCBhHCU-usGFX7ueZKT6KSlWVo9dmKj5TXAWHkmSTCRcMVq0zn7eiHc-8vUaxp0VhcD_VlUuQ5UUywdcu76j2unqJQyBuMBDy6Kr0jcNsr_q4rS0epb0JVyWdlOEXcGnSUweNVNMaV5QQSrAZQA_4KdkXRd_rTmdBsgbAHTe73w81WHpweHljMB2eCEMLcb8C4hFQ45dxSwUCag" referrerPolicy="no-referrer" />
     
     <div className="animate-fade-in z-20 flex flex-col items-center w-full max-w-5xl">
       <motion.p 
@@ -417,14 +313,7 @@ const Hero = ({ settings }: { settings: SiteSettings }) => (
       </motion.div>
     </div>
 
-    <motion.img
-      src="/assets/ornamen/ornamen%20kanan%20bawah.svg"
-      alt="Ornament Bottom Right"
-      initial={{ opacity: 0, x: 20, y: 20 }}
-      animate={{ opacity: 0.6, x: 0, y: 0 }}
-      transition={{ duration: 1.5, ease: "easeOut", delay: 0.9 }}
-      className="absolute bottom-2 right-2 md:bottom-6 md:right-6 w-14 md:w-20 lg:w-28 pointer-events-none z-0 animate-float-delayed"
-    />
+    <img alt="Floral Decor" className="absolute w-[200px] md:w-[350px] z-10 pointer-events-none opacity-30 bottom-0 right-0 translate-x-1/4 translate-y-1/4 rotate-180" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDIxNtqsgVE5P7BktovoaEa6t3YC3YNaO5lGqcfoFrY2RePUynchvO_TO9v_CSHh1Z-t8PePrJvrNzY06PDdu3RVzJzL8C1h-ExkT6kIw1fzIocM-FR78V7g0mR_vwbTKVBnADOJ2vP8ChRlPlkaByp8HqCnWgPKQyU57MTGai03Uw1_2wZ66_cS3oogBwFh1clczg18f2t2yqbWsnl007CLGdJn6fE_Og5sCSJgW0uxcqK8_zVWgZ4g8G7v6xq_bnDY7ngur6k15nF" referrerPolicy="no-referrer" />
   </section>
 );
 
@@ -463,9 +352,6 @@ const Countdown = ({ settings }: { settings: SiteSettings }) => {
   return (
     <section className="py-20 bg-white relative overflow-hidden">
       <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-20 pointer-events-none"></div>
-
-
-
       <div className="container mx-auto px-4 max-w-4xl text-center relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -555,8 +441,6 @@ const EventDetails = ({ settings }: { settings: SiteSettings }) => {
     <div className="absolute top-0 left-0 w-full h-full bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-30 pointer-events-none"></div>
     <div className="absolute top-1/4 left-0 w-96 h-96 bg-brand/5 rounded-full blur-3xl -translate-x-1/2 pointer-events-none"></div>
     <div className="absolute bottom-1/4 right-0 w-96 h-96 bg-dustyrose/5 rounded-full blur-3xl translate-x-1/2 pointer-events-none"></div>
-
-
 
     <div className="container mx-auto px-4 max-w-6xl relative z-10">
       <div className="text-center mb-24">
@@ -693,50 +577,6 @@ const LoveStory = ({ settings }: { settings: SiteSettings }) => {
       <div className="absolute top-0 right-0 w-64 h-64 bg-brand/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
       <div className="absolute bottom-0 left-0 w-64 h-64 bg-dustyrose/5 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2"></div>
 
-      {/* Corner Ornaments */}
-      {/* Top Left — ornamen love kiri 02 */}
-      <motion.img
-        src="/assets/ornamen/ornamen%20love%20kiri%2002.svg"
-        alt="Ornament Top Left"
-        initial={{ opacity: 0, x: -30, y: -30, rotate: -10 }}
-        whileInView={{ opacity: 0.7, x: 0, y: 0, rotate: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 1.4, ease: 'easeOut', delay: 0.1 }}
-        className="absolute top-2 left-2 md:top-6 md:left-6 w-10 md:w-14 lg:w-18 pointer-events-none z-0 animate-sway origin-top-left"
-      />
-      {/* Top Right — ornamen love kanan 02 */}
-      <motion.img
-        src="/assets/ornamen/ornamen%20love%20kanan%2002.svg"
-        alt="Ornament Top Right"
-        initial={{ opacity: 0, x: 30, y: -30, rotate: 10 }}
-        whileInView={{ opacity: 0.7, x: 0, y: 0, rotate: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 1.4, ease: 'easeOut', delay: 0.25 }}
-        className="absolute top-2 right-2 md:top-6 md:right-6 w-10 md:w-14 lg:w-18 pointer-events-none z-0 animate-float origin-top-right"
-      />
-      {/* Bottom Left — ornamen love kanan 02 (flipped horizontally) */}
-      <div className="absolute bottom-2 left-2 md:bottom-6 md:left-6 w-10 md:w-14 lg:w-18 pointer-events-none z-0" style={{ transform: 'scaleX(-1)' }}>
-        <motion.img
-          src="/assets/ornamen/ornamen%20love%20kanan%2002.svg"
-          alt="Ornament Bottom Left"
-          initial={{ opacity: 0, x: 30, y: 30, rotate: -10 }}
-          whileInView={{ opacity: 0.7, x: 0, y: 0, rotate: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 1.4, ease: 'easeOut', delay: 0.4 }}
-          className="w-full h-full animate-sway origin-bottom-right"
-        />
-      </div>
-      {/* Bottom Right — ornamen balon */}
-      <motion.img
-        src="/assets/ornamen/ornamen%20balon.svg"
-        alt="Ornament Bottom Right"
-        initial={{ opacity: 0, x: 30, y: 30, scale: 0.8 }}
-        whileInView={{ opacity: 0.75, x: 0, y: 0, scale: 1 }}
-        viewport={{ once: true }}
-        transition={{ duration: 1.4, ease: [0.22, 1, 0.36, 1], delay: 0.55 }}
-        className="absolute bottom-2 right-2 md:bottom-6 md:right-6 w-10 md:w-14 lg:w-18 pointer-events-none z-0 animate-float-delayed origin-bottom-right"
-      />
-
       <div className="container mx-auto px-4 max-w-4xl relative z-10">
         <div className="text-center mb-20">
           <motion.p 
@@ -848,8 +688,6 @@ const Gallery = ({ settings, onImageSelect }: { settings: SiteSettings, onImageS
       <div className="absolute top-1/4 left-0 w-96 h-96 bg-brand/5 rounded-full blur-3xl -translate-x-1/2 pointer-events-none"></div>
       <div className="absolute bottom-1/4 right-0 w-96 h-96 bg-dustyrose/5 rounded-full blur-3xl translate-x-1/2 pointer-events-none"></div>
 
-
-
       <div className="container mx-auto px-4 relative z-10">
         <div className="text-center mb-20">
           <motion.p 
@@ -904,7 +742,6 @@ const Gallery = ({ settings, onImageSelect }: { settings: SiteSettings, onImageS
                 src={src} 
                 referrerPolicy="no-referrer" 
                 loading="lazy"
-                decoding="async"
               />
             </motion.div>
           ))}
@@ -926,9 +763,6 @@ const WeddingGift = ({ settings }: { settings: SiteSettings }) => {
   return (
     <section className="py-24 bg-cream relative overflow-hidden">
       <div className="absolute top-0 left-0 w-full h-full bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-30 pointer-events-none"></div>
-      
-
-
       <div className="container mx-auto px-4 max-w-3xl text-center relative z-10">
         <motion.div
           initial={{ opacity: 0, scale: 0.9, filter: "blur(10px)" }}
@@ -996,9 +830,8 @@ const WeddingGift = ({ settings }: { settings: SiteSettings }) => {
                     src={settings.gift_qr_url} 
                     alt="Gift QR" 
                     className="w-full h-full object-contain"
-                    referrerPolicy="no-referrer" 
+                    referrerPolicy="no-referrer"
                     loading="lazy"
-                    decoding="async"
                   />
                 </motion.div>
                 <div>
@@ -1330,8 +1163,6 @@ const RSVPAndGuestbook = ({ messages, onAddMessage, guestName }: { messages: Mes
       <div className="absolute -top-24 -right-24 w-96 h-96 bg-brand/5 rounded-full blur-3xl pointer-events-none"></div>
       <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-brand/5 rounded-full blur-3xl pointer-events-none"></div>
 
-
-
       <div className="container mx-auto px-4 max-w-4xl relative z-10">
         <div className="text-center mb-16">
           <motion.p 
@@ -1441,93 +1272,11 @@ const RSVPAndGuestbook = ({ messages, onAddMessage, guestName }: { messages: Mes
 
 // 4. Update Footer to accept couple name props.
 const Footer = ({ settings }: { settings: SiteSettings }) => (
-  <footer className="py-32 bg-maroon text-cream text-center relative overflow-hidden">
+  <footer className="py-32 bg-ink text-cream text-center relative overflow-hidden">
     {/* Subtle background pattern */}
     <div className="absolute inset-0 opacity-5 pointer-events-none" style={{ backgroundImage: 'radial-gradient(#C5A880 1px, transparent 1px)', backgroundSize: '40px 40px' }}></div>
     <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-2xl h-64 bg-brand/10 blur-[100px] pointer-events-none"></div>
     
-    {/* Corner Ornaments — bunga 01.svg × 4 corners */}
-    {/* Top Left */}
-    <motion.img
-      src="/assets/ornamen/bunga 01.svg"
-      alt="Ornamen pojok kiri atas"
-      className="absolute top-0 left-0 w-24 md:w-32 lg:w-40 pointer-events-none opacity-40"
-      style={{ transformOrigin: 'top left' }}
-      initial={{ opacity: 0, x: -20, y: -20, rotate: -10 }}
-      whileInView={{ opacity: 0.4, x: 0, y: 0, rotate: 0 }}
-      viewport={{ once: true }}
-      animate={{
-        y: [0, -8, 0],
-        rotate: [-2, 2, -2],
-      }}
-      transition={{
-        opacity: { duration: 1.2 },
-        x: { duration: 1.2 },
-        y: { duration: 6, repeat: Infinity, ease: 'easeInOut' },
-        rotate: { duration: 8, repeat: Infinity, ease: 'easeInOut' },
-      }}
-    />
-    {/* Top Right */}
-    <motion.img
-      src="/assets/ornamen/bunga 01.svg"
-      alt="Ornamen pojok kanan atas"
-      className="absolute top-0 right-0 w-24 md:w-32 lg:w-40 pointer-events-none opacity-40"
-      style={{ transformOrigin: 'top right', transform: 'scaleX(-1)' }}
-      initial={{ opacity: 0, x: 20, y: -20, rotate: 10 }}
-      whileInView={{ opacity: 0.4, x: 0, y: 0, rotate: 0 }}
-      viewport={{ once: true }}
-      animate={{
-        y: [0, -6, 0],
-        rotate: [2, -2, 2],
-      }}
-      transition={{
-        opacity: { duration: 1.2, delay: 0.2 },
-        x: { duration: 1.2, delay: 0.2 },
-        y: { duration: 7, repeat: Infinity, ease: 'easeInOut', delay: 0.2 },
-        rotate: { duration: 9, repeat: Infinity, ease: 'easeInOut', delay: 0.2 },
-      }}
-    />
-    {/* Bottom Left */}
-    <motion.img
-      src="/assets/ornamen/bunga 01.svg"
-      alt="Ornamen pojok kiri bawah"
-      className="absolute bottom-0 left-0 w-24 md:w-32 lg:w-40 pointer-events-none opacity-40"
-      style={{ transformOrigin: 'bottom left', transform: 'scaleY(-1)' }}
-      initial={{ opacity: 0, x: -20, y: 20, rotate: 10 }}
-      whileInView={{ opacity: 0.4, x: 0, y: 0, rotate: 0 }}
-      viewport={{ once: true }}
-      animate={{
-        y: [0, 8, 0],
-        rotate: [3, -1, 3],
-      }}
-      transition={{
-        opacity: { duration: 1.2, delay: 0.4 },
-        x: { duration: 1.2, delay: 0.4 },
-        y: { duration: 8, repeat: Infinity, ease: 'easeInOut', delay: 0.4 },
-        rotate: { duration: 10, repeat: Infinity, ease: 'easeInOut', delay: 0.4 },
-      }}
-    />
-    {/* Bottom Right */}
-    <motion.img
-      src="/assets/ornamen/bunga 01.svg"
-      alt="Ornamen pojok kanan bawah"
-      className="absolute bottom-0 right-0 w-24 md:w-32 lg:w-40 pointer-events-none opacity-40"
-      style={{ transformOrigin: 'bottom right', transform: 'scale(-1, -1)' }}
-      initial={{ opacity: 0, x: 20, y: 20, rotate: -10 }}
-      whileInView={{ opacity: 0.4, x: 0, y: 0, rotate: 0 }}
-      viewport={{ once: true }}
-      animate={{
-        y: [0, 6, 0],
-        rotate: [-2, 2, -2],
-      }}
-      transition={{
-        opacity: { duration: 1.2, delay: 0.6 },
-        x: { duration: 1.2, delay: 0.6 },
-        y: { duration: 9, repeat: Infinity, ease: 'easeInOut', delay: 0.6 },
-        rotate: { duration: 11, repeat: Infinity, ease: 'easeInOut', delay: 0.6 },
-      }}
-    />
-
     <div className="container mx-auto px-4 max-w-4xl relative z-10 flex flex-col items-center">
       
       {/* Small Gallery */}
@@ -1546,14 +1295,7 @@ const Footer = ({ settings }: { settings: SiteSettings }) => (
             transition={{ delay: idx * 0.1, duration: 0.8 }}
             className="w-24 h-36 md:w-40 md:h-56 rounded-t-full rounded-b-full overflow-hidden border border-brand/20 shadow-2xl shadow-black/50 group"
           >
-            <img 
-              src={src} 
-              alt="Wedding Gallery" 
-              className="w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-110 transition-all duration-700 grayscale-[30%] group-hover:grayscale-0" 
-              referrerPolicy="no-referrer" 
-              loading="lazy"
-              decoding="async"
-            />
+            <img src={src} alt="Wedding Gallery" className="w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-110 transition-all duration-700 grayscale-[30%] group-hover:grayscale-0" referrerPolicy="no-referrer" />
           </motion.div>
         ))}
       </div>
@@ -1883,19 +1625,6 @@ export default function App() {
         <Route path="/" element={
           <>
             <Cover isOpened={isOpened} onOpen={() => setIsOpened(true)} settings={siteSettings} />
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95, filter: "blur(10px)" }}
-            animate={{ 
-              opacity: isOpened ? 1 : 0, 
-              scale: isOpened ? 1 : 0.95, 
-              filter: isOpened ? "blur(0px)" : "blur(10px)" 
-            }}
-            transition={{ 
-              duration: 1.5, 
-              delay: 0.2,
-              ease: [0.22, 1, 0.36, 1] 
-            }}
-          >
             <Hero settings={siteSettings} />
             <Countdown settings={siteSettings} />
             <EventDetails settings={siteSettings} />
@@ -1905,7 +1634,6 @@ export default function App() {
             <WeddingGift settings={siteSettings} />
             <RSVPAndGuestbook messages={messages} onAddMessage={handleAddMessage} guestName={guestName} />
             <Footer settings={siteSettings} />
-          </motion.div>
           </>
         } />
         <Route path="/wishes" element={<AllWishes messages={messages} />} />
