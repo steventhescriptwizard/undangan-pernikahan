@@ -89,8 +89,17 @@ export const Cover = ({ isOpened, onOpen, settings }: CoverProps) => {
     <AnimatePresence>
       {!isOpened && (
         <motion.div
-          initial={{ y: 0 }}
-          exit={{ y: '-100%', opacity: 0 }}
+          initial={{ y: 0, opacity: 1, scale: 1, filter: "blur(0px)" }}
+          exit={{ 
+            y: '-100%', 
+            opacity: 0, 
+            scale: 1.1, 
+            filter: "blur(20px)",
+          }}
+          transition={{ 
+            duration: 1.3, 
+            ease: [0.22, 1, 0.36, 1] 
+          }}
           className="fixed inset-0 z-[100] overflow-y-auto overflow-x-hidden bg-maroon" >
           
           <FallingPetals />
@@ -693,7 +702,7 @@ const LoveStory = ({ settings }: { settings: SiteSettings }) => {
         whileInView={{ opacity: 0.7, x: 0, y: 0, rotate: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 1.4, ease: 'easeOut', delay: 0.1 }}
-        className="absolute top-2 left-2 md:top-6 md:left-6 w-12 md:w-16 lg:w-20 pointer-events-none z-0 animate-sway origin-top-left"
+        className="absolute top-2 left-2 md:top-6 md:left-6 w-10 md:w-14 lg:w-18 pointer-events-none z-0 animate-sway origin-top-left"
       />
       {/* Top Right — ornamen love kanan 02 */}
       <motion.img
@@ -703,10 +712,10 @@ const LoveStory = ({ settings }: { settings: SiteSettings }) => {
         whileInView={{ opacity: 0.7, x: 0, y: 0, rotate: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 1.4, ease: 'easeOut', delay: 0.25 }}
-        className="absolute top-2 right-2 md:top-6 md:right-6 w-12 md:w-16 lg:w-20 pointer-events-none z-0 animate-float origin-top-right"
+        className="absolute top-2 right-2 md:top-6 md:right-6 w-10 md:w-14 lg:w-18 pointer-events-none z-0 animate-float origin-top-right"
       />
       {/* Bottom Left — ornamen love kanan 02 (flipped horizontally) */}
-      <div className="absolute bottom-2 left-2 md:bottom-6 md:left-6 w-12 md:w-16 lg:w-20 pointer-events-none z-0" style={{ transform: 'scaleX(-1)' }}>
+      <div className="absolute bottom-2 left-2 md:bottom-6 md:left-6 w-10 md:w-14 lg:w-18 pointer-events-none z-0" style={{ transform: 'scaleX(-1)' }}>
         <motion.img
           src="/assets/ornamen/ornamen%20love%20kanan%2002.svg"
           alt="Ornament Bottom Left"
@@ -725,7 +734,7 @@ const LoveStory = ({ settings }: { settings: SiteSettings }) => {
         whileInView={{ opacity: 0.75, x: 0, y: 0, scale: 1 }}
         viewport={{ once: true }}
         transition={{ duration: 1.4, ease: [0.22, 1, 0.36, 1], delay: 0.55 }}
-        className="absolute bottom-2 right-2 md:bottom-6 md:right-6 w-12 md:w-16 lg:w-20 pointer-events-none z-0 animate-float-delayed origin-bottom-right"
+        className="absolute bottom-2 right-2 md:bottom-6 md:right-6 w-10 md:w-14 lg:w-18 pointer-events-none z-0 animate-float-delayed origin-bottom-right"
       />
 
       <div className="container mx-auto px-4 max-w-4xl relative z-10">
@@ -895,6 +904,7 @@ const Gallery = ({ settings, onImageSelect }: { settings: SiteSettings, onImageS
                 src={src} 
                 referrerPolicy="no-referrer" 
                 loading="lazy"
+                decoding="async"
               />
             </motion.div>
           ))}
@@ -986,8 +996,9 @@ const WeddingGift = ({ settings }: { settings: SiteSettings }) => {
                     src={settings.gift_qr_url} 
                     alt="Gift QR" 
                     className="w-full h-full object-contain"
-                    referrerPolicy="no-referrer"
+                    referrerPolicy="no-referrer" 
                     loading="lazy"
+                    decoding="async"
                   />
                 </motion.div>
                 <div>
@@ -1535,7 +1546,14 @@ const Footer = ({ settings }: { settings: SiteSettings }) => (
             transition={{ delay: idx * 0.1, duration: 0.8 }}
             className="w-24 h-36 md:w-40 md:h-56 rounded-t-full rounded-b-full overflow-hidden border border-brand/20 shadow-2xl shadow-black/50 group"
           >
-            <img src={src} alt="Wedding Gallery" className="w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-110 transition-all duration-700 grayscale-[30%] group-hover:grayscale-0" referrerPolicy="no-referrer" />
+            <img 
+              src={src} 
+              alt="Wedding Gallery" 
+              className="w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-110 transition-all duration-700 grayscale-[30%] group-hover:grayscale-0" 
+              referrerPolicy="no-referrer" 
+              loading="lazy"
+              decoding="async"
+            />
           </motion.div>
         ))}
       </div>
@@ -1865,6 +1883,19 @@ export default function App() {
         <Route path="/" element={
           <>
             <Cover isOpened={isOpened} onOpen={() => setIsOpened(true)} settings={siteSettings} />
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95, filter: "blur(10px)" }}
+            animate={{ 
+              opacity: isOpened ? 1 : 0, 
+              scale: isOpened ? 1 : 0.95, 
+              filter: isOpened ? "blur(0px)" : "blur(10px)" 
+            }}
+            transition={{ 
+              duration: 1.5, 
+              delay: 0.2,
+              ease: [0.22, 1, 0.36, 1] 
+            }}
+          >
             <Hero settings={siteSettings} />
             <Countdown settings={siteSettings} />
             <EventDetails settings={siteSettings} />
@@ -1874,6 +1905,7 @@ export default function App() {
             <WeddingGift settings={siteSettings} />
             <RSVPAndGuestbook messages={messages} onAddMessage={handleAddMessage} guestName={guestName} />
             <Footer settings={siteSettings} />
+          </motion.div>
           </>
         } />
         <Route path="/wishes" element={<AllWishes messages={messages} />} />
