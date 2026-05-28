@@ -428,17 +428,98 @@ const Hero = ({ settings }: { settings: SiteSettings }) => (
   </section>
 );
 
+const parseTargetDate = (settings: SiteSettings): number => {
+  let targetTime = NaN;
+
+  // 1. Try to parse from settings.short_date (e.g. "05 . 06 . 2026")
+  if (settings.short_date) {
+    const cleanShort = settings.short_date.replace(/\s+/g, '');
+    const parts = cleanShort.split(/[\.\-\/]/);
+    if (parts.length === 3) {
+      let day = parseInt(parts[0], 10);
+      let month = parseInt(parts[1], 10);
+      let year = parseInt(parts[2], 10);
+      // Handle YYYY-MM-DD format if parts[0] is year
+      if (parts[0].length === 4) {
+        year = parseInt(parts[0], 10);
+        month = parseInt(parts[1], 10);
+        day = parseInt(parts[2], 10);
+      }
+      if (!isNaN(day) && !isNaN(month) && !isNaN(year) && month >= 1 && month <= 12 && day >= 1 && day <= 31) {
+        // Try to get time from akad_time (e.g. "19:00 WIB")
+        let hours = 8;
+        let minutes = 0;
+        if (settings.akad_time) {
+          const timeMatch = settings.akad_time.match(/(\d{1,2})[:.](\d{2})/);
+          if (timeMatch) {
+            hours = parseInt(timeMatch[1], 10);
+            minutes = parseInt(timeMatch[2], 10);
+          }
+        }
+        targetTime = new Date(year, month - 1, day, hours, minutes, 0).getTime();
+      }
+    }
+  }
+
+  // 2. Try to parse from settings.event_date (e.g. "Jumat, 05 Juni 2026")
+  if (isNaN(targetTime) && settings.event_date) {
+    const lowerEvent = settings.event_date.toLowerCase();
+    const indonesianMonths = [
+      'januari', 'februari', 'maret', 'april', 'mei', 'juni',
+      'juli', 'agustus', 'september', 'oktober', 'november', 'desember'
+    ];
+    let monthIndex = -1;
+    for (let i = 0; i < indonesianMonths.length; i++) {
+      if (lowerEvent.includes(indonesianMonths[i])) {
+        monthIndex = i;
+        break;
+      }
+    }
+    if (monthIndex !== -1) {
+      const yearMatch = lowerEvent.match(/\b(20\d{2})\b/);
+      const dayMatch = lowerEvent.match(/\b(\d{1,2})\b/);
+      if (yearMatch && dayMatch) {
+        const year = parseInt(yearMatch[1], 10);
+        let day = parseInt(dayMatch[1], 10);
+        if (day === year) {
+          const numbers = lowerEvent.match(/\b\d+\b/g);
+          if (numbers) {
+            const other = numbers.find(n => n.length <= 2);
+            if (other) day = parseInt(other, 10);
+          }
+        }
+        let hours = 8;
+        let minutes = 0;
+        if (settings.akad_time) {
+          const timeMatch = settings.akad_time.match(/(\d{1,2})[:.](\d{2})/);
+          if (timeMatch) {
+            hours = parseInt(timeMatch[1], 10);
+            minutes = parseInt(timeMatch[2], 10);
+          }
+        }
+        targetTime = new Date(year, monthIndex, day, hours, minutes, 0).getTime();
+      }
+    }
+  }
+
+  // 3. Fallback to settings.countdown_target (ISO format)
+  if (isNaN(targetTime) && settings.countdown_target) {
+    targetTime = new Date(settings.countdown_target).getTime();
+  }
+
+  // 4. Default fallback (1 year ahead)
+  if (isNaN(targetTime)) {
+    targetTime = new Date().getTime() + (365 * 24 * 60 * 60 * 1000);
+  }
+
+  return targetTime;
+};
+
 const Countdown = ({ settings }: { settings: SiteSettings }) => {
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
 
   useEffect(() => {
-    // Parse target date from string (e.g. "2026-08-24T08:00:00")
-    // Fallback to 1 year ahead if invalid/missing
-    let targetTime = new Date(settings.countdown_target).getTime();
-    if (isNaN(targetTime)) {
-        targetTime = new Date().getTime() + (365 * 24 * 60 * 60 * 1000);
-    }
-    const weddingDate = targetTime;
+    const weddingDate = parseTargetDate(settings);
     
     const timer = setInterval(() => {
       const now = new Date().getTime();
@@ -446,6 +527,7 @@ const Countdown = ({ settings }: { settings: SiteSettings }) => {
 
       if (distance < 0) {
         clearInterval(timer);
+        setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
         return;
       }
 
@@ -458,7 +540,7 @@ const Countdown = ({ settings }: { settings: SiteSettings }) => {
     }, 1000);
 
     return () => clearInterval(timer);
-  }, []);
+  }, [settings]);
 
   return (
     <section className="py-20 bg-white relative overflow-hidden">
